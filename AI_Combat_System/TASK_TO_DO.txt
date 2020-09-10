@@ -1,0 +1,5 @@
+-dla wielu npc
+-trzeba uwazac na kolizje jesli sie bedzie ocierac to tez wtedy sie odpali event na atak
+-co jesli ktos wejdzie im w droge?
+-po sciezce wedlug punktow
+-do polowy miesiaca tj. wrzesien 2020
