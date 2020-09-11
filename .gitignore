@@ -364,6 +364,16 @@ MigrationBackup/
 FodyWeavers.xsd
 
 #UE4 gitignore
+
+#ignore files except the:
+!Content/AI
+!Content/Animations
+!Content/Blueprints_Interfaces
+!Content/Mannequin
+!Content/ThirdPersonCPP
+
+######################
+
 # Visual Studio 2015 user specific files
 .vs/
 
