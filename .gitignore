@@ -448,3 +448,10 @@ Plugins/*/Intermediate/*
 
 # Cache files for the editor to use
 DerivedDataCache/*
+
+
+AI_Combat_System/Combat_System/Binaries
+AI_Combat_System/Combat_System/Content/Bunker
+AI_Combat_System/Combat_System/Content/StarterContent/
+AI_Combat_System/Combat_System/Intermediate
+AI_Combat_System/Combat_System/Saved
