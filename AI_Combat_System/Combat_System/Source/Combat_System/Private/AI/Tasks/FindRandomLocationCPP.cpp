@@ -37,5 +37,5 @@ EBTNodeResult::Type UFindRandomLocationCPP::ExecuteTask(UBehaviorTreeComponent& 
     //    //At this point, the task has been successfully completed
     //    return EBTNodeResult::Succeeded;
     //}
-    return EBTNodeResult::Failed;
+    return EBTNodeResult::Type();
 }

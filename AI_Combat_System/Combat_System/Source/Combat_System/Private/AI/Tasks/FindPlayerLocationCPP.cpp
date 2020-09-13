@@ -3,6 +3,9 @@
 
 EBTNodeResult::Type UFindPlayerLocationCPP::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
+	Super::ExecuteTask(OwnerComp, NodeMemory);
 
-	return EBTNodeResult::Failed;
+	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, FString::Printf(TEXT("UFindPlayerLocationCPP")));
+
+	return EBTNodeResult::Type();
 }
