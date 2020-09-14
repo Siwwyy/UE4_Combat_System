@@ -10,6 +10,8 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Engine/Engine.h"
 
+#include "Public/AI/NPC/NPCCPP.h"
+
 //////////////////////////////////////////////////////////////////////////
 // ACombat_SystemCharacter
 
@@ -51,16 +53,26 @@ ACombat_SystemCharacter::ACombat_SystemCharacter()
 void ACombat_SystemCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	Attack_Delegate.BindUObject(this, &ACombat_SystemCharacter::Melee_Attack);
-
-	if (Attack_Delegate.IsBound())
+	if (ANPCCPP* NPC = Cast<ANPCCPP>(pCharacter))
 	{
-		Attack_Delegate.Execute(true);
+		Attack_Delegate.AddDynamic(NPC, &ANPCCPP::Attack);
 	}
 }
 
 //////////////////////////////////////////////////////////////////////////
 // Input
+
+void ACombat_SystemCharacter::Melee_Attack()
+{
+
+
+	if (Attack_Delegate.IsBound())
+	{
+		Attack_Delegate.Broadcast();
+	}
+
+	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, FString::Printf(TEXT("Melee_AttackCPP")));
+}
 
 void ACombat_SystemCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
 {
@@ -68,7 +80,7 @@ void ACombat_SystemCharacter::SetupPlayerInputComponent(class UInputComponent* P
 	check(PlayerInputComponent);
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
-	//PlayerInputComponent->BindAction("MeleeAtack", IE_Pressed, this, &ACombat_SystemCharacter::Melee_Attack);
+	PlayerInputComponent->BindAction("MeleeAtack", IE_Pressed, this, &ACombat_SystemCharacter::Melee_Attack);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &ACombat_SystemCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ACombat_SystemCharacter::MoveRight);
@@ -96,17 +108,12 @@ void ACombat_SystemCharacter::OnResetVR()
 
 void ACombat_SystemCharacter::TouchStarted(ETouchIndex::Type FingerIndex, FVector Location)
 {
-		Jump();
+	Jump();
 }
 
 void ACombat_SystemCharacter::TouchStopped(ETouchIndex::Type FingerIndex, FVector Location)
 {
-		StopJumping();
-}
-
-void ACombat_SystemCharacter::Melee_Attack(bool bState)
-{
-	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, FString::Printf(TEXT("Melee_AttackCPP")));
+	StopJumping();
 }
 
 void ACombat_SystemCharacter::TurnAtRate(float Rate)
@@ -137,12 +144,12 @@ void ACombat_SystemCharacter::MoveForward(float Value)
 
 void ACombat_SystemCharacter::MoveRight(float Value)
 {
-	if ( (Controller != NULL) && (Value != 0.0f) )
+	if ((Controller != NULL) && (Value != 0.0f))
 	{
 		// find out which way is right
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
-	
+
 		// get right vector 
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 		// add movement in that direction

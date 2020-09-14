@@ -6,9 +6,9 @@
 #include "GameFramework/Character.h"
 #include "Combat_SystemCharacter.generated.h"
 
-DECLARE_DELEGATE_OneParam(Melee_Atack_Delegate, bool);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnMeeleAttack);
 
-UCLASS(Blueprintable, config = Game)
+UCLASS(config = Game)
 class ACombat_SystemCharacter : public ACharacter
 {
 	GENERATED_BODY()
@@ -28,6 +28,9 @@ public:
 
 	virtual void BeginPlay() override;
 
+	UPROPERTY(EditAnywhere)
+	ACharacter* pCharacter;
+
 #pragma region Pre_Setup_Movement_Variables
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
@@ -37,12 +40,22 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 		float BaseLookUpRate;
 #pragma endregion
-	////Delegate Melee_Atack_Delegate
-	//UDELEGATE(BlueprintCallable, Category = "Delegates")
-	//Melee_Atack_Delegate Melee_Atack_Delegate;
 
-	//UPROPERTY(BlueprintCallable, Category = "Delegates")
-		Melee_Atack_Delegate Attack_Delegate;
+#pragma region User_Defined_Delegates
+
+	UPROPERTY(BlueprintAssignable, Category = "Delegates")
+		FOnMeeleAttack Attack_Delegate;
+
+#pragma endregion
+
+#pragma region Pre_Setup_Getters
+
+	/** Returns CameraBoom subobject **/
+	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
+	/** Returns FollowCamera subobject **/
+	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+
+#pragma endregion
 
 protected:
 
@@ -77,21 +90,10 @@ protected:
 
 	//Melee Attack Function
 	UFUNCTION(BlueprintCallable, Category = "Attack", meta = (AllowProtectedAccess = "true"))
-		void Melee_Attack(bool bState);
+		void Melee_Attack();
 
-
-protected:
-	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-	// End of APawn interface
 
-public:
-
-#pragma region Pre_Setup_Getters
-	/** Returns CameraBoom subobject **/
-	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
-	/** Returns FollowCamera subobject **/
-	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
-#pragma endregion
+	
 
 };
