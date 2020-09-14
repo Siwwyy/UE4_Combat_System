@@ -1,6 +1,11 @@
 
 #include "../../../Public/AI/Tasks/FindPlayerLocationCPP.h"
 
+UFindPlayerLocationCPP::UFindPlayerLocationCPP(FObjectInitializer const& object_initializer)
+{
+
+}
+
 EBTNodeResult::Type UFindPlayerLocationCPP::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	Super::ExecuteTask(OwnerComp, NodeMemory);

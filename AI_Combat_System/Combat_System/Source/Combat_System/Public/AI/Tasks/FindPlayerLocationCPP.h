@@ -11,6 +11,7 @@ class COMBAT_SYSTEM_API UFindPlayerLocationCPP : public UBTTask_BlueprintBase
 {
 	GENERATED_BODY()
 public:
+	UFindPlayerLocationCPP(FObjectInitializer const& object_initializer);
 
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 };

@@ -2,6 +2,11 @@
 #include "../../../Public/AI/Tasks/FindRandomLocationCPP.h"
 
 
+UFindRandomLocationCPP::UFindRandomLocationCPP(FObjectInitializer const& object_initializer)
+{
+
+}
+
 EBTNodeResult::Type UFindRandomLocationCPP::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
     //AMyAIController* AICon = Cast<AMyAIController>(OwnerComp.GetAIOwner());

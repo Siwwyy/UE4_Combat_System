@@ -1,6 +1,11 @@
 
 #include "../../../Public/AI/Tasks/ChasePlayerCPP.h"
 
+UChasePlayerCPP::UChasePlayerCPP(FObjectInitializer const& object_initializer)
+{
+
+}
+
 EBTNodeResult::Type UChasePlayerCPP::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	Super::ExecuteTask(OwnerComp, NodeMemory);

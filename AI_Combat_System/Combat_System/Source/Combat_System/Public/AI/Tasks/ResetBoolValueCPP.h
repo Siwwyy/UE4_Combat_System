@@ -11,6 +11,7 @@ class COMBAT_SYSTEM_API UResetBoolValueCPP : public UBTTask_BlueprintBase
 {
 	GENERATED_BODY()
 public:
+	UResetBoolValueCPP(FObjectInitializer const& object_initializer);
 
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 };

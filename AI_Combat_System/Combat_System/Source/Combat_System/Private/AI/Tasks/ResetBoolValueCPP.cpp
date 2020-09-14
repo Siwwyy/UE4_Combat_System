@@ -2,6 +2,11 @@
 #include "../../../Public/AI/Tasks/ResetBoolValueCPP.h"
 
 
+UResetBoolValueCPP::UResetBoolValueCPP(FObjectInitializer const& object_initializer)
+{
+
+}
+
 EBTNodeResult::Type UResetBoolValueCPP::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	Super::ExecuteTask(OwnerComp, NodeMemory);
