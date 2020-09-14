@@ -8,6 +8,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Engine/Engine.h"
 
 //////////////////////////////////////////////////////////////////////////
 // ACombat_SystemCharacter
@@ -47,6 +48,17 @@ ACombat_SystemCharacter::ACombat_SystemCharacter()
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
 }
 
+void ACombat_SystemCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+	Attack_Delegate.BindUObject(this, &ACombat_SystemCharacter::Melee_Attack);
+
+	if (Attack_Delegate.IsBound())
+	{
+		Attack_Delegate.Execute(true);
+	}
+}
+
 //////////////////////////////////////////////////////////////////////////
 // Input
 
@@ -56,6 +68,7 @@ void ACombat_SystemCharacter::SetupPlayerInputComponent(class UInputComponent* P
 	check(PlayerInputComponent);
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+	//PlayerInputComponent->BindAction("MeleeAtack", IE_Pressed, this, &ACombat_SystemCharacter::Melee_Attack);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &ACombat_SystemCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ACombat_SystemCharacter::MoveRight);
@@ -76,7 +89,6 @@ void ACombat_SystemCharacter::SetupPlayerInputComponent(class UInputComponent* P
 	PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &ACombat_SystemCharacter::OnResetVR);
 }
 
-
 void ACombat_SystemCharacter::OnResetVR()
 {
 	UHeadMountedDisplayFunctionLibrary::ResetOrientationAndPosition();
@@ -90,6 +102,11 @@ void ACombat_SystemCharacter::TouchStarted(ETouchIndex::Type FingerIndex, FVecto
 void ACombat_SystemCharacter::TouchStopped(ETouchIndex::Type FingerIndex, FVector Location)
 {
 		StopJumping();
+}
+
+void ACombat_SystemCharacter::Melee_Attack(bool bState)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, FString::Printf(TEXT("Melee_AttackCPP")));
 }
 
 void ACombat_SystemCharacter::TurnAtRate(float Rate)
