@@ -8,7 +8,7 @@
 #include "NPCCPP.generated.h"
 
 UCLASS()
-class COMBAT_SYSTEM_API ANPCCPP : public ACharacter, public ICombatInterfaceCPP
+class COMBAT_SYSTEM_API ANPCCPP : public ACharacter/*, public ICombatInterfaceCPP*/
 {
 	GENERATED_BODY()
 
@@ -18,9 +18,9 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Blueprintable, Category = "Attack")
-		void Melee_Attack();
-	virtual void Melee_Attack_Implementation() override;
+	//UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Blueprintable, Category = "Attack")
+	//	void Melee_Attack();
+	//virtual void Melee_Attack_Implementation() override;
 
 protected:
 	virtual void BeginPlay() override;

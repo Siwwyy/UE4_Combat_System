@@ -20,7 +20,7 @@ class COMBAT_SYSTEM_API ICombatInterfaceCPP
 
 public:
 
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Blueprintable, Category = "Attack")
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Attack")
 	void Melee_Attack();
 
 };
