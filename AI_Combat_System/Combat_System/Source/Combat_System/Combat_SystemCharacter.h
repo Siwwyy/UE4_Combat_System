@@ -4,12 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Public/Interfaces/CombatInterfaceCPP.h"
+
 #include "Combat_SystemCharacter.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnMeeleAttack);
 
 UCLASS(config = Game)
-class ACombat_SystemCharacter : public ACharacter
+class ACombat_SystemCharacter : public ACharacter, public ICombatInterfaceCPP
 {
 	GENERATED_BODY()
 
@@ -88,9 +90,9 @@ protected:
 	void TouchStopped(ETouchIndex::Type FingerIndex, FVector Location);
 #pragma endregion
 
-	//Melee Attack Function
-	UFUNCTION(BlueprintCallable, Category = "Attack", meta = (AllowProtectedAccess = "true"))
-		void Melee_Attack();
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Blueprintable, Category = "Attack")
+	void Melee_Attack();
+	virtual void Melee_Attack_Implementation() override;
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
