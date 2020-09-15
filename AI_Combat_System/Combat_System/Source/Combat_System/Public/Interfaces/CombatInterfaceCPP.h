@@ -17,7 +17,6 @@ class COMBAT_SYSTEM_API ICombatInterfaceCPP
 {
 	GENERATED_BODY()
 
-
 public:
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Attack")

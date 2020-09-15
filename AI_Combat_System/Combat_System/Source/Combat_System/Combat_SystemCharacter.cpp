@@ -53,39 +53,28 @@ ACombat_SystemCharacter::ACombat_SystemCharacter()
 void ACombat_SystemCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	//if (ANPCCPP* NPC = Cast<ANPCCPP>(pCharacter))
-	//{
-	//	Attack_Delegate.AddDynamic(NPC, &ANPCCPP::Melee_Attack_Implementation);
-	//}
+	if (ANPCCPP* NPC = Cast<ANPCCPP>(pCharacter))
+	{
+		Attack_Delegate.AddDynamic(NPC, &ANPCCPP::NCP_is_Attacked);
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////
 // Input
 
-//void ACombat_SystemCharacter::Melee_Attack()
-//{
-//
-//
-//	if (Attack_Delegate.IsBound())
-//	{
-//		Attack_Delegate.Broadcast();
-//	}
-//
-//	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, FString::Printf(TEXT("Melee_AttackCPP")));
-//}
+void ACombat_SystemCharacter::Melee_Attack_Implementation()
+{
+	if (Attack_Delegate.IsBound())
+	{
+		Attack_Delegate.Broadcast();
+	}
 
-//void ACombat_SystemCharacter::Melee_Attack_Implementation()
-//{
-//	//if (Attack_Delegate.IsBound())
-//	//{
-//	//	Attack_Delegate.Broadcast();
-//	//}
-//	if (ICombatInterfaceCPP* Interface = Cast<ICombatInterfaceCPP>(this))
-//	{
-//		Interface->Execute_Melee_Attack(this);
-//		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, FString::Printf(TEXT("Melee_AttackCPP")));
-//	}
-//}
+	if (ICombatInterfaceCPP* Interface = Cast<ICombatInterfaceCPP>(this))
+	{
+		Interface->Execute_Melee_Attack(this);
+		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, FString::Printf(TEXT("Melee_AttackCPP")));
+	}
+}
 
 void ACombat_SystemCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
 {
@@ -93,7 +82,7 @@ void ACombat_SystemCharacter::SetupPlayerInputComponent(class UInputComponent* P
 	check(PlayerInputComponent);
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
-	//PlayerInputComponent->BindAction("MeleeAttack", IE_Pressed, this, &ACombat_SystemCharacter::Melee_Attack_Implementation);
+	PlayerInputComponent->BindAction("MeleeAttack", IE_Pressed, this, &ACombat_SystemCharacter::Melee_Attack_Implementation);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &ACombat_SystemCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ACombat_SystemCharacter::MoveRight);
