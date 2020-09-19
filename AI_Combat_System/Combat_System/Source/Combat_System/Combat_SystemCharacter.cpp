@@ -103,6 +103,23 @@ void ACombat_SystemCharacter::SetupPlayerInputComponent(class UInputComponent* P
 	PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &ACombat_SystemCharacter::OnResetVR);
 }
 
+void ACombat_SystemCharacter::Spawn()
+{
+	UWorld* world = GetWorld();
+	if (ToSpawn && world)
+	{
+		FActorSpawnParameters spawnParams;
+		spawnParams.Owner = this;
+
+		//FRotator SpawnRotation(0.f,0.f,90.f);
+		FRotator SpawnRotation;
+		//FVector SpawnLocation(-1880.f, -3080.f, 218.f);
+		FVector SpawnLocation = RootComponent->GetComponentLocation();
+
+		world->SpawnActor<ANPCCPP>(ToSpawn, SpawnLocation, SpawnRotation, spawnParams);
+	}
+}
+
 void ACombat_SystemCharacter::OnResetVR()
 {
 	UHeadMountedDisplayFunctionLibrary::ResetOrientationAndPosition();

@@ -10,6 +10,8 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnMeeleAttack);
 
+class ANPCCPP;
+
 UCLASS(config = Game)
 class ACombat_SystemCharacter : public ACharacter, public ICombatInterfaceCPP
 {
@@ -47,6 +49,12 @@ public:
 
 	UPROPERTY(BlueprintAssignable, Category = "Delegates")
 		FOnMeeleAttack Attack_Delegate;
+
+	UPROPERTY(EditAnywhere, Category = "Subclass")
+	TSubclassOf<ANPCCPP> ToSpawn;
+
+	UFUNCTION(BlueprintCallable, Category = "Spawn")
+	void Spawn();
 
 #pragma endregion
 
