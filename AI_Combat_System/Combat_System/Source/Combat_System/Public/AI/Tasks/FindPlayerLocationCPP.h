@@ -14,4 +14,7 @@ public:
 	UFindPlayerLocationCPP(FObjectInitializer const& object_initializer);
 
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
+
+	UFUNCTION(BlueprintCallable, Category = "Cos")
+	void SetSightRange(AAIController* Controller, float SightRange);
 };

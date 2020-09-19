@@ -14,3 +14,8 @@ EBTNodeResult::Type UFindPlayerLocationCPP::ExecuteTask(UBehaviorTreeComponent& 
 
 	return EBTNodeResult::Type();
 }
+
+void UFindPlayerLocationCPP::SetSightRange(AAIController* Controller, float SightRange)
+{
+   
+}
