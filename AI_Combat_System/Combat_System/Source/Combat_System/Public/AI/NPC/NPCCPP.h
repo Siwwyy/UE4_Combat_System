@@ -14,6 +14,7 @@ class COMBAT_SYSTEM_API ANPCCPP : public ACharacter, public ICombatInterfaceCPP
 
 public:
 	ANPCCPP();
+	ANPCCPP(const FVector & Spawn_Location, const FRotator& Spawn_Rotation);
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 

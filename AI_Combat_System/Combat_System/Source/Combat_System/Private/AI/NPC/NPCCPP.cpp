@@ -28,6 +28,14 @@ void ANPCCPP::BeginPlay()
 	Super::BeginPlay();
 }
 
+ANPCCPP::ANPCCPP(const FVector& Spawn_Location, const FRotator& Spawn_Rotation) :
+	bIsAttacked(false)
+{
+	PrimaryActorTick.bCanEverTick = false;
+	RootComponent->GetOwner()->SetActorLocation(Spawn_Location);
+	RootComponent->GetOwner()->SetActorRotation(Spawn_Rotation);
+}
+
 void ANPCCPP::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
