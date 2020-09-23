@@ -1,7 +1,7 @@
+#include "../Public/NPC_SpawnerCPP.h"
 
 #include "Math/UnrealMathUtility.h"
 
-#include "../Public/NPC_SpawnerCPP.h"
 
 #include "../Public/AI/NPC/NPCCPP.h"
 #include "../Public/AI/NPC/Spawnable_NPC_CPP.h"

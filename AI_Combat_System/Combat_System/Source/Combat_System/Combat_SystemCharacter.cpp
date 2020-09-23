@@ -8,6 +8,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Materials/MaterialInstanceDynamic.h"
 #include "Engine/Engine.h"
 
 #include "Public/AI/NPC/NPCCPP.h"
@@ -53,6 +54,19 @@ ACombat_SystemCharacter::ACombat_SystemCharacter()
 void ACombat_SystemCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	APlayerCameraManager* const cam_manager = GetWorld()->GetFirstPlayerController()->PlayerCameraManager;
+	cam_manager->ViewPitchMin = -50.0f;
+	cam_manager->ViewPitchMax = 10.0f;
+
+	// set material color of character
+	UMaterialInstanceDynamic* const material_instance = UMaterialInstanceDynamic::Create(GetMesh()->GetMaterial(0), this);
+	if (material_instance)
+	{
+		material_instance->SetVectorParameterValue("BodyColor", FLinearColor(0.0f, 1.0f, 1.0f, 0.1f));
+		GetMesh()->SetMaterial(0, material_instance);
+	}
+
 	if (ANPCCPP* NPC = Cast<ANPCCPP>(pCharacter))
 	{
 		Attack_Delegate.AddDynamic(NPC, &ANPCCPP::NCP_is_Attacked);
