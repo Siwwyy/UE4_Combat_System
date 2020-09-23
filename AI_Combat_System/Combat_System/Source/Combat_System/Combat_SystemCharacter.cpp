@@ -1,6 +1,7 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "Combat_SystemCharacter.h"
+
 #include "HeadMountedDisplayFunctionLibrary.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -11,7 +12,7 @@
 #include "Materials/MaterialInstanceDynamic.h"
 #include "Engine/Engine.h"
 
-#include "Public/AI/NPC/NPCCPP.h"
+#include "Public/AI/NPC/NPC_PatrolPath_CPP.h"
 
 //////////////////////////////////////////////////////////////////////////
 // ACombat_SystemCharacter
@@ -55,9 +56,9 @@ void ACombat_SystemCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	APlayerCameraManager* const cam_manager = GetWorld()->GetFirstPlayerController()->PlayerCameraManager;
-	cam_manager->ViewPitchMin = -50.0f;
-	cam_manager->ViewPitchMax = 10.0f;
+	//APlayerCameraManager* const cam_manager = GetWorld()->GetFirstPlayerController()->PlayerCameraManager;
+	//cam_manager->ViewPitchMin = -50.0f;
+	//cam_manager->ViewPitchMax = 10.0f;
 
 	// set material color of character
 	UMaterialInstanceDynamic* const material_instance = UMaterialInstanceDynamic::Create(GetMesh()->GetMaterial(0), this);
@@ -67,9 +68,9 @@ void ACombat_SystemCharacter::BeginPlay()
 		GetMesh()->SetMaterial(0, material_instance);
 	}
 
-	if (ANPCCPP* NPC = Cast<ANPCCPP>(pCharacter))
+	if (ANPC_PatrolPath_CPP* NPC = Cast<ANPC_PatrolPath_CPP>(pCharacter))
 	{
-		Attack_Delegate.AddDynamic(NPC, &ANPCCPP::NCP_is_Attacked);
+		Attack_Delegate.AddDynamic(NPC, &ANPC_PatrolPath_CPP::NCP_is_Attacked);
 	}
 }
 
@@ -119,19 +120,19 @@ void ACombat_SystemCharacter::SetupPlayerInputComponent(class UInputComponent* P
 
 void ACombat_SystemCharacter::Spawn()
 {
-	UWorld* world = GetWorld();
-	if (ToSpawn && world)
-	{
-		FActorSpawnParameters spawnParams;
-		spawnParams.Owner = this;
+	//UWorld* world = GetWorld();
+	//if (ToSpawn && world)
+	//{
+	//	FActorSpawnParameters spawnParams;
+	//	spawnParams.Owner = this;
 
-		//FRotator SpawnRotation(0.f,0.f,90.f);
-		FRotator SpawnRotation;
-		//FVector SpawnLocation(-1880.f, -3080.f, 218.f);
-		FVector SpawnLocation = RootComponent->GetComponentLocation();
+	//	//FRotator SpawnRotation(0.f,0.f,90.f);
+	//	FRotator SpawnRotation;
+	//	//FVector SpawnLocation(-1880.f, -3080.f, 218.f);
+	//	FVector SpawnLocation = RootComponent->GetComponentLocation();
 
-		world->SpawnActor<ANPCCPP>(ToSpawn, SpawnLocation, SpawnRotation, spawnParams);
-	}
+	//	world->SpawnActor<ANPCCPP>(ToSpawn, SpawnLocation, SpawnRotation, spawnParams);
+	//}
 }
 
 void ACombat_SystemCharacter::OnResetVR()

@@ -5,6 +5,7 @@
 
 #include "../Public/AI/NPC/NPCCPP.h"
 #include "../Public/AI/NPC/Spawnable_NPC_CPP.h"
+#include "../Public/AI/NPC/NPC_PatrolPath_CPP.h"
 
 ANPC_SpawnerCPP::ANPC_SpawnerCPP() :
 	pStatic_Mesh(CreateDefaultSubobject<UStaticMeshComponent>("UStaticMeshComponent")),
@@ -72,7 +73,7 @@ void ANPC_SpawnerCPP::Add_NPC()
 		FRotator SpawnRotation(0.f, 0.f, 0.f);
 		//FVector SpawnLocation(-1880.f, -3080.f, 218.f);
 		FVector SpawnLocation = RootComponent->GetComponentLocation();
-		ASpawnable_NPC_CPP* NPC = world->SpawnActor<ASpawnable_NPC_CPP>(pNPC, SpawnLocation, SpawnRotation, spawnParams);
+		ANPC_PatrolPath_CPP* NPC = world->SpawnActor<ANPC_PatrolPath_CPP>(pNPC, SpawnLocation, SpawnRotation, spawnParams);
 		//if ( = Cast<ANPCCPP>(pNPC))
 		if (NPC)
 		{

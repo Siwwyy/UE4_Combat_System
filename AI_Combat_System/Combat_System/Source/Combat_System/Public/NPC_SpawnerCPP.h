@@ -10,6 +10,7 @@ class UStaticMeshComponent;
 class UCharacter;
 class ANPCCPP;
 class ASpawnable_NPC_CPP;
+class ANPC_PatrolPath_CPP;
 
 UCLASS()
 class COMBAT_SYSTEM_API ANPC_SpawnerCPP : public AActor
@@ -37,7 +38,8 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "NPC_CPP", meta = (AllowProtectedAccess = "true"))
 	//ACharacter* pNPC;
 	//TSubclassOf<ANPCCPP> pNPC; /*ACharacter* pNPC;*/
-	TSubclassOf<ASpawnable_NPC_CPP> pNPC; /*ACharacter* pNPC;*/
+	//TSubclassOf<ASpawnable_NPC_CPP> pNPC; /*ACharacter* pNPC;*/
+	TSubclassOf<ANPC_PatrolPath_CPP> pNPC; /*ACharacter* pNPC;*/
 
 	//UPROPERTY(EditAnywhere, Category = "NPC_Array", meta = (AllowProtectedAccess = "true"))
 	//TSubclassOf<UCharacter> Character;

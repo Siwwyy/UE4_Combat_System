@@ -10,7 +10,9 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnMeeleAttack);
 
-class ANPCCPP;
+
+class ANPC_PatrolPath_CPP;
+
 
 UCLASS(config = Game)
 class ACombat_SystemCharacter : public ACharacter, public ICombatInterfaceCPP
@@ -19,7 +21,7 @@ class ACombat_SystemCharacter : public ACharacter, public ICombatInterfaceCPP
 
 #pragma region Component_Declaration
 	/** Camera boom positioning the camera behind the character */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"));
 		class USpringArmComponent* CameraBoom;
 
 	/** Follow camera */
@@ -33,7 +35,7 @@ public:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditAnywhere)
-	ACharacter* pCharacter;
+		ANPC_PatrolPath_CPP* pCharacter;
 
 #pragma region Pre_Setup_Movement_Variables
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
@@ -50,8 +52,8 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Delegates")
 		FOnMeeleAttack Attack_Delegate;
 
-	UPROPERTY(EditAnywhere, Category = "Subclass")
-	TSubclassOf<ANPCCPP> ToSpawn;
+	//UPROPERTY(EditAnywhere, Category = "Subclass")
+	//TSubclassOf<ANPCCPP> ToSpawn;
 
 	UFUNCTION(BlueprintCallable, Category = "Spawn")
 	void Spawn();
