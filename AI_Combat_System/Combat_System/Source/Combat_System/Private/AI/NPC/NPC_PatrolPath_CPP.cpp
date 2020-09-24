@@ -2,12 +2,16 @@
 #include "../../../Public/AI/NPC/NPC_PatrolPath_CPP.h"
 
 #include "../../../Public/AI/Patrol_Path/Patrol_Path_CPP.h"
+#include "../../../Public/AI/Controllers/AI_Controller.h"
 
 #include "Materials/MaterialInstanceDynamic.h"
 
 
 
 ANPC_PatrolPath_CPP::ANPC_PatrolPath_CPP() :
+	pDynamicMaterial(nullptr),
+	pPatrol_Path(nullptr),
+	pAi_Controller(nullptr),
 	bIsAttacked(false)
 {
 	PrimaryActorTick.bCanEverTick = false;
@@ -26,6 +30,16 @@ void ANPC_PatrolPath_CPP::Melee_Attack_Implementation()
 void ANPC_PatrolPath_CPP::NCP_is_Attacked()
 {
 	bIsAttacked = true;
+}
+
+void ANPC_PatrolPath_CPP::Set_pPatrol_Path(APatrol_Path_CPP* const ptr)
+{
+	pPatrol_Path = ptr;
+}
+
+void ANPC_PatrolPath_CPP::Set_pAi_Controller(AAI_Controller* const ptr)
+{
+	pAi_Controller = ptr;
 }
 
 void ANPC_PatrolPath_CPP::BeginPlay()

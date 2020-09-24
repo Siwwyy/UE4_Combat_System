@@ -37,6 +37,7 @@ public:
 	UPROPERTY(EditAnywhere)
 		ANPC_PatrolPath_CPP* pCharacter;
 
+
 #pragma region Pre_Setup_Movement_Variables
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)

@@ -7,42 +7,41 @@
 
 
 class UStaticMeshComponent;
-class UCharacter;
-class ANPCCPP;
+class APatrol_Path_CPP;
 class ASpawnable_NPC_CPP;
 class ANPC_PatrolPath_CPP;
+class AAI_Controller;
 
 UCLASS()
 class COMBAT_SYSTEM_API ANPC_SpawnerCPP : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
+
+public:
 	ANPC_SpawnerCPP();
 
 	virtual void Tick(float DeltaTime) override;
 
-	~ANPC_SpawnerCPP();
-
 protected:
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components_CPP", meta = (AllowProtectedAccess = "true" ))
-	UStaticMeshComponent* pStatic_Mesh;
+#pragma region Class_Components
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components_CPP", meta = (AllowProtectedAccess = "true"))
-	AActor* pPatrol_Path;
+		UStaticMeshComponent* pStatic_Mesh;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "NPC_Array_CPP", meta = (AllowProtectedAccess = "true"))
-	TArray<ANPCCPP*> NPC_Array;
+#pragma endregion
+#pragma region Class_Pointers
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "NPC_CPP", meta = (AllowProtectedAccess = "true"))
-	//ACharacter* pNPC;
-	//TSubclassOf<ANPCCPP> pNPC; /*ACharacter* pNPC;*/
-	//TSubclassOf<ASpawnable_NPC_CPP> pNPC; /*ACharacter* pNPC;*/
-	TSubclassOf<ANPC_PatrolPath_CPP> pNPC; /*ACharacter* pNPC;*/
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Pointers", meta = (AllowProtectedAccess = "true"))
+		APatrol_Path_CPP* pPatrol_Path;
 
-	//UPROPERTY(EditAnywhere, Category = "NPC_Array", meta = (AllowProtectedAccess = "true"))
-	//TSubclassOf<UCharacter> Character;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Pointers", meta = (AllowProtectedAccess = "true"))
+		AAI_Controller* pAi_Controller;
+
+#pragma endregion
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Pointers", meta = (AllowProtectedAccess = "true"))
+		TSubclassOf<ANPC_PatrolPath_CPP> pNPC;
 
 	virtual void BeginPlay() override;
 
