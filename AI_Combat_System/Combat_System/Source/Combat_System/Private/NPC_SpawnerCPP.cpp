@@ -13,14 +13,14 @@ ANPC_SpawnerCPP::ANPC_SpawnerCPP() :
 	pAi_Controller(nullptr),
 	pNPC(nullptr)
 {
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true;
 }
 
 void ANPC_SpawnerCPP::BeginPlay()
 {
 	Super::BeginPlay();
-	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, FString::Printf(TEXT("Spawned a new NPC")));
-	Add_NPC();
+	//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, FString::Printf(TEXT("Spawned a new NPC")));
+	//Add_NPC();
 }
 
 void ANPC_SpawnerCPP::Add_NPC()
