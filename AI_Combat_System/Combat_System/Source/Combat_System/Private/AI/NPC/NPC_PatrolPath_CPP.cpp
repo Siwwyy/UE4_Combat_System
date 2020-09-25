@@ -34,11 +34,19 @@ void ANPC_PatrolPath_CPP::NCP_is_Attacked()
 
 void ANPC_PatrolPath_CPP::Set_pPatrol_Path(APatrol_Path_CPP* const ptr)
 {
+	if (!ptr)
+	{
+		return;
+	}
 	pPatrol_Path = ptr;
 }
 
 void ANPC_PatrolPath_CPP::Set_pAi_Controller(AAI_Controller* const ptr)
 {
+	if (!ptr)
+	{
+		return;
+	}
 	pAi_Controller = ptr;
 }
 
@@ -52,5 +60,4 @@ void ANPC_PatrolPath_CPP::BeginPlay()
 		pDynamicMaterial->SetVectorParameterValue("BodyColor", FLinearColor(1.0f, 0.0f, 0.0f, 1.0f));	 //Params: Set which vector inside the Material Editor and what kind of color u want
 		GetMesh()->SetMaterial(0, pDynamicMaterial);	//Set the material
 	}
-
 }
