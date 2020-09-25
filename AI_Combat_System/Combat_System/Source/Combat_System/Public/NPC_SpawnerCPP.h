@@ -9,6 +9,7 @@
 class UStaticMeshComponent;
 class APatrol_Path_CPP;
 class ANPC_PatrolPath_CPP;
+struct FTimerHandle;
 
 UCLASS()
 class COMBAT_SYSTEM_API ANPC_SpawnerCPP : public AActor
@@ -16,9 +17,8 @@ class COMBAT_SYSTEM_API ANPC_SpawnerCPP : public AActor
 	GENERATED_BODY()
 
 public:
-	ANPC_SpawnerCPP();
 
-	virtual void Tick(float DeltaTime) override;
+	ANPC_SpawnerCPP();
 
 protected:
 
@@ -26,6 +26,12 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Class_Components", meta = (AllowProtectedAccess = "true"))
 		UStaticMeshComponent* pStatic_Mesh;
+
+#pragma endregion
+#pragma region Class_Variables
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Class_Variables", meta = (AllowProtectedAccess = "true"))
+	FTimerHandle SpawnTimerHandle;
 
 #pragma endregion
 #pragma region Class_Pointers
@@ -42,10 +48,14 @@ protected:
 	virtual void BeginPlay() override;
 
 	UFUNCTION(BlueprintCallable, Category = "Class_Functions")
+	void Spawn();
+
+	UFUNCTION(BlueprintCallable, Category = "Class_Functions")
 	void Spawn_NPC();
 
 	UFUNCTION(BlueprintCallable, Category = "Class_Functions")
 	void Delete_NPC();
 
 #pragma endregion
+
 };
