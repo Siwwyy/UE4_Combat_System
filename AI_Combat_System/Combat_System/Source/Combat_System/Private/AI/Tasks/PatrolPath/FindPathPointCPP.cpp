@@ -11,7 +11,7 @@ EBTNodeResult::Type UFindPathPointCPP::ExecuteTask(UBehaviorTreeComponent& Owner
 {
 	Super::ExecuteTask(OwnerComp, NodeMemory);
 
-	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, FString::Printf(TEXT("UFindPathPointCPP")));
+	//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, FString::Printf(TEXT("UFindPathPointCPP")));
 
 	return EBTNodeResult::Type();
 }

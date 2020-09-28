@@ -11,7 +11,7 @@ EBTNodeResult::Type UAbortSequenceCPP::ExecuteTask(UBehaviorTreeComponent& Owner
 {
 	Super::ExecuteTask(OwnerComp, NodeMemory);
 
-	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, FString::Printf(TEXT("UAbortSequenceCPP")));
+	//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, FString::Printf(TEXT("UAbortSequenceCPP")));
 
 	return EBTNodeResult::Type();
 }

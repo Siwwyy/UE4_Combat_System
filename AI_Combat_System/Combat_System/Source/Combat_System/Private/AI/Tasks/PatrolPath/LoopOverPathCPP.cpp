@@ -11,7 +11,7 @@ EBTNodeResult::Type ULoopOverPathCPP::ExecuteTask(UBehaviorTreeComponent& OwnerC
 {
 	Super::ExecuteTask(OwnerComp, NodeMemory);
 
-	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, FString::Printf(TEXT("ULoopOverPathCPP")));
+	//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, FString::Printf(TEXT("ULoopOverPathCPP")));
 
 	return EBTNodeResult::Type();
 }

@@ -11,7 +11,7 @@ EBTNodeResult::Type UIncrementPathIndexCPP::ExecuteTask(UBehaviorTreeComponent& 
 {
 	Super::ExecuteTask(OwnerComp, NodeMemory);
 
-	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, FString::Printf(TEXT("UIncrementPathIndexCPP")));
+	//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, FString::Printf(TEXT("UIncrementPathIndexCPP")));
 
 	return EBTNodeResult::Type();
 }

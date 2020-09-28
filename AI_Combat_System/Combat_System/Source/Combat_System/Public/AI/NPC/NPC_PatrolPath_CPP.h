@@ -23,22 +23,17 @@ public:
 
 	ANPC_PatrolPath_CPP();
 
-
-	UFUNCTION()
-		virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
-
-	UFUNCTION()
-		void OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-
-
 #pragma region Class_Functions
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Class_Functions")
 		void Melee_Attack();
 	virtual void Melee_Attack_Implementation() override;
 
-	UFUNCTION(BlueprintCallable, Category = "Class_Functions")
-		void NCP_is_Attacked();
+	UFUNCTION()
+		virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
+
+	UFUNCTION()
+		void OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 #pragma endregion
 #pragma region Class_Setters

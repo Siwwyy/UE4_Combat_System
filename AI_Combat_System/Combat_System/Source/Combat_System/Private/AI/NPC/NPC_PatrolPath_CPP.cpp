@@ -27,7 +27,7 @@ float ANPC_PatrolPath_CPP::TakeDamage(float DamageAmount, FDamageEvent const& Da
 {
 	float ActualDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
-	//custom logic in hire
+	//custom logic in here
 	if (ACombat_SystemCharacter* Player = Cast<ACombat_SystemCharacter>(DamageCauser))
 	{
 		bIsAttacked = true;
@@ -56,11 +56,6 @@ void ANPC_PatrolPath_CPP::Melee_Attack_Implementation()
 
 		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, FString::Printf(TEXT("ANPC_PatrolPath_CPP")));
 	}
-}
-
-void ANPC_PatrolPath_CPP::NCP_is_Attacked()
-{
-	bIsAttacked = true;
 }
 
 void ANPC_PatrolPath_CPP::Set_pPatrol_Path(APatrol_Path_CPP* const ptr)

@@ -75,10 +75,10 @@ void ACombat_SystemCharacter::BeginPlay()
 		GetMesh()->SetMaterial(0, material_instance);
 	}
 
-	if (ANPC_PatrolPath_CPP* NPC = Cast<ANPC_PatrolPath_CPP>(pCharacter))
-	{
-		Attack_Delegate.AddDynamic(NPC, &ANPC_PatrolPath_CPP::NCP_is_Attacked);
-	}
+	//if (ANPC_PatrolPath_CPP* NPC = Cast<ANPC_PatrolPath_CPP>(pCharacter))
+	//{
+	//	Attack_Delegate.AddDynamic(NPC, &ANPC_PatrolPath_CPP::NCP_is_Attacked);
+	//}
 
 
 
@@ -91,10 +91,10 @@ void ACombat_SystemCharacter::BeginPlay()
 
 void ACombat_SystemCharacter::Melee_Attack_Implementation()
 {
-	if (Attack_Delegate.IsBound())
-	{
-		Attack_Delegate.Broadcast();
-	}
+	//if (Attack_Delegate.IsBound())
+	//{
+	//	Attack_Delegate.Broadcast();
+	//}
 
 	if (ICombatInterfaceCPP* Interface = Cast<ICombatInterfaceCPP>(this))
 	{
