@@ -4,6 +4,7 @@
 #include "Math/TransformNonVectorized.h"
 #include "Engine/EngineTypes.h"
 #include "TimerManager.h"
+#include "GameFramework/Actor.h"
 
 #include "../Public/AI/NPC/NPC_PatrolPath_CPP.h"
 
@@ -44,9 +45,4 @@ void ANPC_SpawnerCPP::Spawn_NPC()
 			NPC->FinishSpawning(SpawnLocAndRotation);
 		}
 	}
-}
-
-void ANPC_SpawnerCPP::Delete_NPC()
-{
-
 }

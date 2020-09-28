@@ -4,8 +4,11 @@
 
 #include "HeadMountedDisplayFunctionLibrary.h"
 #include "Camera/CameraComponent.h"
+
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
+#include "Components/BoxComponent.h"
+
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -43,6 +46,10 @@ ACombat_SystemCharacter::ACombat_SystemCharacter()
 	CameraBoom->TargetArmLength = 300.0f; // The camera follows at this distance behind the character	
 	CameraBoom->bUsePawnControlRotation = true; // Rotate the arm based on the controller
 
+
+	pBox_Component = CreateDefaultSubobject<UBoxComponent>(TEXT("pBox_Component"));
+	pBox_Component->SetupAttachment(GetMesh(), FName("s_hand_punch"));
+
 	// Create a follow camera
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
@@ -72,6 +79,11 @@ void ACombat_SystemCharacter::BeginPlay()
 	{
 		Attack_Delegate.AddDynamic(NPC, &ANPC_PatrolPath_CPP::NCP_is_Attacked);
 	}
+
+
+
+	pBox_Component->OnComponentBeginOverlap.AddDynamic(this, &ACombat_SystemCharacter::OnOverlapBegin);
+	//pBox_Component->OnComponentHit.AddDynamic(this, &ACombat_SystemCharacter::OnHit);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -87,7 +99,7 @@ void ACombat_SystemCharacter::Melee_Attack_Implementation()
 	if (ICombatInterfaceCPP* Interface = Cast<ICombatInterfaceCPP>(this))
 	{
 		Interface->Execute_Melee_Attack(this);
-		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, FString::Printf(TEXT("Melee_AttackCPP")));
+		//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, FString::Printf(TEXT("Melee_AttackCPP")));
 	}
 }
 
@@ -116,6 +128,22 @@ void ACombat_SystemCharacter::SetupPlayerInputComponent(class UInputComponent* P
 
 	// VR headset functionality
 	PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &ACombat_SystemCharacter::OnResetVR);
+}
+
+//void ACombat_SystemCharacter::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+//{
+//	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, FString::Printf(TEXT("Melee_AttackCPP"), *OtherActor->GetName()));
+//	//UE_LOG(LogTemp, Warning, TEXT("HIT ACTOR: %s"), *OtherActor->GetName());
+//}
+
+void ACombat_SystemCharacter::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if (ANPC_PatrolPath_CPP* NPC = Cast<ANPC_PatrolPath_CPP>(OtherActor))
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, FString::Printf(TEXT("OnOverlapBegin from Player: %s"), *OtherActor->GetName()));
+		NPC->TakeDamage(50.f, FDamageEvent(), nullptr, this);
+		pBox_Component->SetGenerateOverlapEvents(false);	//when I hit NPC it prevents me from i.e hitting multiple times
+	}
 }
 
 void ACombat_SystemCharacter::Spawn()

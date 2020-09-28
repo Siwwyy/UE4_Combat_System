@@ -53,9 +53,6 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "Class_Functions")
 	void Spawn_NPC();
 
-	UFUNCTION(BlueprintCallable, Category = "Class_Functions")
-	void Delete_NPC();
-
 #pragma endregion
 
 };
