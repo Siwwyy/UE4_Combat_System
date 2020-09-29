@@ -48,10 +48,10 @@ protected:
 	virtual void BeginPlay() override;
 
 	UFUNCTION(BlueprintCallable, Category = "Class_Functions")
-	void Spawn();
+	void Spawn() const;
 
 	UFUNCTION(BlueprintCallable, Category = "Class_Functions")
-	void Spawn_NPC();
+	void Spawn_NPC() const;
 
 #pragma endregion
 
