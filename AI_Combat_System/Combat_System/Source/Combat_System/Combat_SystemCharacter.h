@@ -18,14 +18,26 @@ UCLASS(config = Game)
 class ACombat_SystemCharacter : public ACharacter, public ICombatInterfaceCPP
 {
 	GENERATED_BODY()
+	
+public:
+	ACombat_SystemCharacter();
 
-#pragma region Component_Declaration
+	virtual void BeginPlay() override;
 
+
+
+
+	UPROPERTY(EditAnywhere)
+		ANPC_PatrolPath_CPP* pCharacter;
+
+#pragma region Class_Components
+
+protected:
 	/** Camera boom positioning the camera behind the character */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"));
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 		class USpringArmComponent* CameraBoom;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"));
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 		class UBoxComponent* pBox_Component;
 
 	/** Follow camera */
@@ -33,17 +45,18 @@ class ACombat_SystemCharacter : public ACharacter, public ICombatInterfaceCPP
 		class UCameraComponent* FollowCamera;
 
 #pragma endregion
+#pragma region Class_Variables
+private:
 
-public:
-	ACombat_SystemCharacter();
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack", meta = (AllowPrivateAccess = "true"))
+		bool bIsAttacked;
 
-	virtual void BeginPlay() override;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health", meta = (AllowPrivateAccess = "true"))
+		float fHealth;
 
-	UPROPERTY(EditAnywhere)
-		ANPC_PatrolPath_CPP* pCharacter;
-
-
+#pragma endregion
 #pragma region Pre_Setup_Movement_Variables
+public:
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 		float BaseTurnRate;
@@ -51,8 +64,8 @@ public:
 	/** Base look up/down rate, in deg/sec. Other scaling may affect final rate. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 		float BaseLookUpRate;
-#pragma endregion
 
+#pragma endregion
 #pragma region User_Defined_Delegates
 
 	UPROPERTY(BlueprintAssignable, Category = "Delegates")
@@ -62,11 +75,10 @@ public:
 	//TSubclassOf<ANPCCPP> ToSpawn;
 
 	UFUNCTION(BlueprintCallable, Category = "Spawn")
-	void Spawn();
+		void Spawn();
 
 #pragma endregion
-
-#pragma region Pre_Setup_Getters
+#pragma region Class_Getters
 
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
@@ -74,10 +86,9 @@ public:
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
 #pragma endregion
-
+#pragma region Pre_Setup_Functions
 protected:
 
-#pragma region Pre_Setup_Functions
 	/** Resets HMD orientation in VR. */
 	void OnResetVR();
 
@@ -105,6 +116,8 @@ protected:
 	/** Handler for when a touch input stops. */
 	void TouchStopped(ETouchIndex::Type FingerIndex, FVector Location);
 #pragma endregion
+#pragma region Class_Functions
+public:
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Attack")
 		void Melee_Attack();
@@ -112,15 +125,14 @@ protected:
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-
-	/// <summary>
-	/// ////
-	/// </summary>
-	/// 
 	UFUNCTION()
-	void OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+		virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
+	
+	UFUNCTION()
+		void OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 	//UFUNCTION()
-	//void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+		//void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
+#pragma endregion 
 };

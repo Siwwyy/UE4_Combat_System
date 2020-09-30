@@ -20,7 +20,8 @@
 //////////////////////////////////////////////////////////////////////////
 // ACombat_SystemCharacter
 
-ACombat_SystemCharacter::ACombat_SystemCharacter()
+ACombat_SystemCharacter::ACombat_SystemCharacter() :
+	fHealth(100.f)
 {
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
@@ -136,13 +137,45 @@ void ACombat_SystemCharacter::SetupPlayerInputComponent(class UInputComponent* P
 //	//UE_LOG(LogTemp, Warning, TEXT("HIT ACTOR: %s"), *OtherActor->GetName());
 //}
 
+float ACombat_SystemCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
+	AController* EventInstigator, AActor* DamageCauser)
+{
+	const float ActualDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+
+	//custom logic in here
+	//if (ACombat_SystemCharacter* Player = Cast<ACombat_SystemCharacter>(DamageCauser))
+	//{
+	//	/*bIsAttacked = true;
+	//	pAttacking_Player = Player;*/
+	//	//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, FString::Printf(TEXT("Take damage NPC: %s"), *DamageCauser->GetName()));
+	//	//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, FString::Printf(TEXT("Take damage Player: %s"), *DamageCauser->GetName()));
+	//	fHealth -= DamageAmount;
+
+	//	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, FString::Printf(TEXT("ACombat_SystemCharacter health: %f"), fHealth));
+	//}
+	
+	bIsAttacked = true;
+	fHealth -= DamageAmount;
+	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, FString::Printf(TEXT("ACombat_SystemCharacter health: %f"), fHealth));
+
+	if(fHealth <= 0.f)
+	{
+		Destroy();
+	}
+
+	return ActualDamage;
+}
+
 void ACombat_SystemCharacter::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if (ANPC_PatrolPath_CPP* NPC = Cast<ANPC_PatrolPath_CPP>(OtherActor))
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, FString::Printf(TEXT("OnOverlapBegin from Player: %s"), *OtherActor->GetName()));
-		NPC->TakeDamage(50.f, FDamageEvent(), nullptr, this);
+		const float fPlayerDamage = 50.f;
+		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, FString::Printf(TEXT("%s OnOverlapBegin | Victim: %s"), *this->GetName() ,*OtherActor->GetName()));
+		NPC->TakeDamage(fPlayerDamage, FDamageEvent(), nullptr, this);
 		pBox_Component->SetGenerateOverlapEvents(false);	//when I hit NPC it prevents me from i.e hitting multiple times
+
+	/*	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, FString::Printf(TEXT("Player health: %f"), fHealth));*/
 	}
 }
 

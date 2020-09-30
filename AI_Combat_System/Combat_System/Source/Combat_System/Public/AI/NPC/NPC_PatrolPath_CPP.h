@@ -65,21 +65,24 @@ protected:
 
 	virtual void BeginPlay() override;
 
-private:
-#pragma region Class_Materials
 
+#pragma region Class_Materials
+private:
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Materials", meta = (AllowPrivateAccess = "true"))
 		UMaterialInstanceDynamic* pDynamicMaterial;
 
 #pragma endregion
 #pragma region Class_Components
-
+private:
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"));
 	class UBoxComponent* pBox_Component;
 
 #pragma endregion
 #pragma region Class_Pointers
-
+private:
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Pointers", meta = (AllowPrivateAccess = "true"))
 		APatrol_Path_CPP* pPatrol_Path;
 
@@ -91,9 +94,13 @@ private:
 
 #pragma endregion
 #pragma region Class_Variables
-
+private:
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack", meta = (AllowPrivateAccess = "true"))
 		bool bIsAttacked;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health", meta = (AllowPrivateAccess = "true"))
+		float fHealth;
 
 #pragma endregion
 };

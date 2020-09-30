@@ -17,9 +17,20 @@ class COMBAT_SYSTEM_API ICombatInterfaceCPP
 {
 	GENERATED_BODY()
 
-public:
 
+
+//#pragma region Class_Variables
+//
+//protected:
+//	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= "Class_Variables")
+//	float fHit_Points;
+//	
+//#pragma endregion
+#pragma region Class_Functions
+
+protected:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Attack")
 	void Melee_Attack();
-
+	
+#pragma endregion
 };
