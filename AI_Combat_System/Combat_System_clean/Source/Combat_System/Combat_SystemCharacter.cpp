@@ -15,6 +15,10 @@
 #include "Materials/MaterialInstanceDynamic.h"
 #include "Engine/Engine.h"
 
+
+#include "DrawDebugHelpers.h"
+#include "Kismet/GameplayStatics.h"
+
 #include "Public/AI/NPC/NPC_PatrolPath_CPP.h"
 
 //////////////////////////////////////////////////////////////////////////
@@ -64,6 +68,8 @@ void ACombat_SystemCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+
+
 	// set material color of character
 	UMaterialInstanceDynamic* const material_instance = UMaterialInstanceDynamic::Create(GetMesh()->GetMaterial(0), this);
 	if (material_instance)
@@ -72,7 +78,6 @@ void ACombat_SystemCharacter::BeginPlay()
 		GetMesh()->SetMaterial(0, material_instance);
 	}
 	pBox_Component->OnComponentBeginOverlap.AddDynamic(this, &ACombat_SystemCharacter::OnOverlapBegin);
-
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -82,6 +87,7 @@ void ACombat_SystemCharacter::Melee_Attack_Implementation()
 {
 	if (ICombatInterfaceCPP* Interface = Cast<ICombatInterfaceCPP>(this))
 	{
+		
 		Interface->Execute_Melee_Attack(this);
 	}
 }
@@ -146,9 +152,44 @@ void ACombat_SystemCharacter::OnOverlapBegin(UPrimitiveComponent* OverlappedComp
 {
 	if (ANPC_PatrolPath_CPP* NPC = Cast<ANPC_PatrolPath_CPP>(OtherActor))
 	{
+		FCollisionQueryParams TraceParams = FCollisionQueryParams(FName(TEXT("Trace")), true);
 		const float fPlayerDamage = 50.f;
 		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, FString::Printf(TEXT("%s OnOverlapBegin | Victim: %s"), *this->GetName() ,*OtherActor->GetName()));
 		NPC->TakeDamage(fPlayerDamage, FDamageEvent(), nullptr, this);
+
+	
+
+
+
+		FVector Player_Bone_Location = GetMesh()->GetBoneLocation("hand_r");		FVector Player_Location{};
+		FRotator Player_Rotation{};
+
+		UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetPlayerViewPoint
+		(
+			OUT Player_Location,
+			OUT Player_Rotation
+		);
+
+		const FVector Line_Start = Player_Bone_Location + Player_Rotation.Vector();
+		Player_Bone_Location.Z += 20;
+		const FVector Line_End = Player_Bone_Location + Player_Rotation.Vector() * 50.f;
+
+		//DrawDebugLine(
+		//	GetWorld(),
+		//	Line_Start,
+		//	Line_End,
+		//	FColor::Red,
+		//	false,
+		//	2.0f,
+		//	0,
+		//	5.0f
+		//);
+
+		DrawDebugSphere(GetWorld(), Player_Bone_Location, 10.f, 10, FColor::Green, false, 2.f, 0, 5.f);
+
+
+
+		
 		pBox_Component->SetGenerateOverlapEvents(false);	//when I hit NPC it prevents me from i.e hitting multiple times
 	}
 }

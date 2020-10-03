@@ -28,13 +28,6 @@ float ANPC_PatrolPath_CPP::TakeDamage(float DamageAmount, FDamageEvent const& Da
 	const float ActualDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
 	//custom logic in here
-	//if (ANPC_PatrolPath_CPP* NPC = Cast<ANPC_PatrolPath_CPP>(DamageCauser))
-	//{
-	//	bIsAttacked = true;
-	//	//pAttacking_Player = Player;
-	//	fHealth -= DamageAmount;
-	//	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, FString::Printf(TEXT("ANPC_PatrolPath_CPP health: %f"), fHealth));
-	//}
 
 
 	bIsAttacked = true;
@@ -55,11 +48,10 @@ void ANPC_PatrolPath_CPP::OnOverlapBegin(UPrimitiveComponent* OverlappedComponen
 {
 	if (ACombat_SystemCharacter* Player = Cast<ACombat_SystemCharacter>(OtherActor))
 	{
-		const float fNPCDamage = 10.f;
+		const float fNPCDamage = 1.f;
 		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, FString::Printf(TEXT("%s OnOverlapBegin | Victim: %s"), *this->GetName(), *OtherActor->GetName()));
 		Player->TakeDamage(fNPCDamage, FDamageEvent(), nullptr, this);
 		pBox_Component->SetGenerateOverlapEvents(false);	//when I hit NPC it prevents me from i.e hitting multiple times
-		//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, FString::Printf(TEXT("NPC health: %f"), fHealth));
 	}
 }
 
@@ -68,8 +60,6 @@ void ANPC_PatrolPath_CPP::Melee_Attack_Implementation()
 	if (ICombatInterfaceCPP* Interface = Cast<ICombatInterfaceCPP>(this))
 	{
 		Interface->Execute_Melee_Attack(this);
-
-		//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, FString::Printf(TEXT("ANPC_PatrolPath_CPP")));
 	}
 }
 

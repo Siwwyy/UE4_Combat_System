@@ -24,6 +24,8 @@ public:
 
 	ANPC_PatrolPath_CPP();
 
+	virtual void BeginPlay() override;
+
 #pragma region Class_Functions
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Class_Functions")
@@ -62,11 +64,6 @@ public:
 
 
 #pragma endregion
-protected:
-
-	virtual void BeginPlay() override;
-
-
 #pragma region Class_Materials
 private:
 	
