@@ -23,16 +23,16 @@
 #include "Perception/AISense_Damage.h"
 
 #include "Public/AI/NPC/NPC_PatrolPath_CPP.h"
+#include "Public/Components/Combat_Component_CPP.h"
 
 //////////////////////////////////////////////////////////////////////////
 // ACombat_SystemCharacter
 
-ACombat_SystemCharacter::ACombat_SystemCharacter() :
-	ABase_Character()
+ACombat_SystemCharacter::ACombat_SystemCharacter()
 {
+	fDamage = 10.f;
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
-
 	// set our turn rates for input
 	BaseTurnRate = 45.f;
 	BaseLookUpRate = 45.f;
@@ -55,23 +55,39 @@ ACombat_SystemCharacter::ACombat_SystemCharacter() :
 	CameraBoom->bUsePawnControlRotation = true; // Rotate the arm based on the controller
 
 
-	pBox_Component = CreateDefaultSubobject<UBoxComponent>(TEXT("pBox_Component"));
-	pBox_Component->SetupAttachment(GetMesh(), FName("s_hand_punch"));
+	//pBox_Component = CreateDefaultSubobject<UBoxComponent>(TEXT("pBox_Component"));
+	//pBox_Component->SetupAttachment(GetMesh(), FName("s_hand_punch"));
 
 	// Create a follow camera
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
-	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
+	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
+	// Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
-	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
+
+	pCombat_Component_CPP = CreateDefaultSubobject<UCombat_Component_CPP>(TEXT("pCombat_Component_CPP"));
+	pCombat_Component_CPP->Get_pBoxComponent()->SetupAttachment(GetMesh(), FName("hand_r"));
+	//pCombat_Component_CPP->Get_pBoxComponent()->RegisterComponent();
+	/*pCombat_Component_CPP->Get_pBoxComponent()->SetupAttachment(RootComponent);*/
+	//pCombat_Component_CPP->Set_Attach_pBox_Component_To_Bone(GetMesh(), FName("hand_r"));
+	//pCombat_Component_CPP->Get_pBoxComponent()->SetupAttachment(GetMesh(), FName("hand_r"));
+	//pCombat_Component_CPP->Get_pStaticMeshComponent()->SetWorldTransform(FTransform(FVector(10.f, 10.f, 10.f)));
+	//pCombat_Component_CPP->Get_pStaticMeshComponent()->SetWorldScale3D(FVector(10.f, 10.f, 10.f));
+	//pCombat_Component_CPP->Get_pStaticMeshComponent()->SetupAttachment(RootComponent);
+	//AddOwnedComponent(pCombat_Component_CPP);
+	//pCombat_Component_CPP->RegisterComponent();
+	//
+	//
+	//
+	//
+	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character)
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
 }
+
 
 void ACombat_SystemCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-
-
 
 	// set material color of character
 	UMaterialInstanceDynamic* const material_instance = UMaterialInstanceDynamic::Create(GetMesh()->GetMaterial(0), this);
@@ -80,7 +96,7 @@ void ACombat_SystemCharacter::BeginPlay()
 		material_instance->SetVectorParameterValue("BodyColor", FLinearColor(0.0f, 1.0f, 1.0f, 0.1f));
 		GetMesh()->SetMaterial(0, material_instance);
 	}
-	pBox_Component->OnComponentBeginOverlap.AddDynamic(this, &ACombat_SystemCharacter::OnOverlapBegin);
+
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -90,7 +106,7 @@ void ACombat_SystemCharacter::Melee_Attack_Implementation()
 {
 	if (ICombatInterfaceCPP* Interface = Cast<ICombatInterfaceCPP>(this))
 	{
-		
+
 		Interface->Execute_Melee_Attack(this);
 	}
 }
@@ -141,7 +157,8 @@ float ACombat_SystemCharacter::TakeDamage(float DamageAmount, FDamageEvent const
 	
 	bIsAttacked = true;
 	fHealth -= DamageAmount;
-	//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, FString::Printf(TEXT("ACombat_SystemCharacter health: %f"), fHealth));
+
+	DrawDebugString(GetWorld(), DamageCauser->GetActorLocation(), FString::Printf(TEXT("ACombat_SystemCharacter health: %f"), fHealth), 0, FColor::Blue, 0.4f, false, 3.f);
 
 	if(fHealth <= 0.f)
 	{
@@ -151,36 +168,36 @@ float ACombat_SystemCharacter::TakeDamage(float DamageAmount, FDamageEvent const
 	return ActualDamage;
 }
 
-void ACombat_SystemCharacter::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{
-	if (ANPC_PatrolPath_CPP* NPC = Cast<ANPC_PatrolPath_CPP>(OtherActor))
-	{
-		//
-		const float fPlayerDamage = 5.f;
-		const FVector Player_Bone_Location = GetMesh()->GetBoneLocation("hand_r");
-		//const FDamageEvent DamageEvent(FPointDamageEvent());
-		//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, FString::Printf(TEXT("%s OnOverlapBegin | Victim: %s"), *this->GetName() ,*OtherActor->GetName()));
-		NPC->TakeDamage(fPlayerDamage, FPointDamageEvent(), GetController() , this);
-		UAISense_Damage::ReportDamageEvent(GetWorld(), NPC, this, fPlayerDamage, NPC->GetActorLocation(), Player_Bone_Location);
-
-		//
-		//DrawDebugSphere(GetWorld(),
-		//	Player_Bone_Location,
-		//	10.f,
-		//	10,
-		//	FColor::Blue,
-		//	false,
-		//	2.f
-		//	);
-
-	
-		//TSubclassOf<UDamageType> P;
-		//const FHitResult HitInfo(ForceInit);
-		//UGameplayStatics::ApplyPointDamage(NPC, fPlayerDamage, GetActorLocation(), HitInfo, GetController(), this, P);
-		
-		pBox_Component->SetGenerateOverlapEvents(false);	//when I hit NPC it prevents me from i.e hitting multiple times	
-	}
-}
+//void ACombat_SystemCharacter::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+//{
+//	if (ANPC_PatrolPath_CPP* NPC = Cast<ANPC_PatrolPath_CPP>(OtherActor))
+//	{
+//		//
+//		const float fPlayerDamage = 5.f;
+//		const FVector Player_Bone_Location = GetMesh()->GetBoneLocation("hand_r");
+//		//const FDamageEvent DamageEvent(FPointDamageEvent());
+//		//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, FString::Printf(TEXT("%s OnOverlapBegin | Victim: %s"), *this->GetName() ,*OtherActor->GetName()));
+//		NPC->TakeDamage(fPlayerDamage, FPointDamageEvent(), GetController() , this);
+//		UAISense_Damage::ReportDamageEvent(GetWorld(), NPC, this, fPlayerDamage, NPC->GetActorLocation(), Player_Bone_Location);
+//
+//		//
+//		//DrawDebugSphere(GetWorld(),
+//		//	Player_Bone_Location,
+//		//	10.f,
+//		//	10,
+//		//	FColor::Blue,
+//		//	false,
+//		//	2.f
+//		//	);
+//
+//	
+//		//TSubclassOf<UDamageType> P;
+//		//const FHitResult HitInfo(ForceInit);
+//		//UGameplayStatics::ApplyPointDamage(NPC, fPlayerDamage, GetActorLocation(), HitInfo, GetController(), this, P);
+//		
+//		pBox_Component->SetGenerateOverlapEvents(false);	//when I hit NPC it prevents me from i.e hitting multiple times	
+//	}
+//}
 
 void ACombat_SystemCharacter::OnResetVR()
 {
@@ -237,70 +254,3 @@ void ACombat_SystemCharacter::MoveRight(float Value)
 		AddMovementInput(Direction, Value);
 	}
 }
-
-
-
-
-/*
- 	
-		//UGameplayStatics::ApplyDamage(this, fPlayerDamage, GetController(), this, nullptr);
-
-
-		//FVector Player_Bone_Location = GetMesh()->GetBoneLocation("hand_r");
-		//FVector Player_Location{};
-		//FRotator Player_Rotation{};
-
-		//UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetPlayerViewPoint
-		//(
-		//	OUT Player_Location,
-		//	OUT Player_Rotation
-		//);
-
-		//const FVector Line_Start = Player_Bone_Location + Player_Rotation.Vector();
-		//Player_Bone_Location.Z += 20;
-		//const FVector Line_End = Player_Bone_Location + Player_Rotation.Vector() * 50.f;
-
-		//DrawDebugLine(
-		//	GetWorld(),
-		//	Line_Start,
-		//	Line_End,
-		//	FColor::Red,
-		//	false,
-		//	2.0f,
-		//	0,
-		//	5.0f
-		//);
-		//const FCollisionShape MySphere = FCollisionShape::MakeSphere(500.0f); // 5M Radius
-		//TArray<FHitResult> OutResults;
-		//bool bCos = GetWorld()->SweepMultiByChannel(OutResults, Line_Start, Line_End, FQuat::Identity,ECollisionChannel::ECC_WorldDynamic,MySphere);
-		//
-		//DrawDebugSphere(GetWorld(), Player_Bone_Location, 10.f, 1, FColor::Green, true, 2.f, 0, 1.f);
-
-
-
-
-
-		
-		//FCollisionQueryParams TraceParams(FName(TEXT("Trace")), true);
-		//FVector Player_Hand_Location = GetMesh()->GetBoneLocation("hand_r", EBoneSpaces::WorldSpace);
-		//const FRotator Rotator = GetController()->GetControlRotation();;
-		//FHitResult Hit(ForceInit);
-		////Location.Normalize();	//to unit vector as a vector initialization
-		////Rotator.Normalize();	//to unit vector as a vector initialization
-		//
-		//
-
-		//FVector start = Player_Hand_Location + Rotator.Vector();
-		//Player_Hand_Location.Z += 30;
-		//FVector end = start + (Rotator.Vector() * 50.f);
-
-		//DrawDebugSphere(GetWorld(), Player_Hand_Location, 10.f, 1, FColor::Green, true, 2.f, 0, 1.f);
-		//
-		//bool bCos = GetWorld()->LineTraceSingleByChannel(Hit,
-		//	start,
-		//	end,
-		//	ECC_WorldDynamic,
-		//	TraceParams
-		//);
-
- */

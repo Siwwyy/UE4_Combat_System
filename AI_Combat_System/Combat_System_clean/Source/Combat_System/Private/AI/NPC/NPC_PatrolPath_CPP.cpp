@@ -12,6 +12,8 @@
 #include "Kismet/GameplayStatics.h"
 
 #include "Components/BoxComponent.h"
+#include "Components/Combat_Component_CPP.h"
+#include "Perception/AISense_Damage.h"
 
 
 ANPC_PatrolPath_CPP::ANPC_PatrolPath_CPP() :
@@ -22,15 +24,18 @@ ANPC_PatrolPath_CPP::ANPC_PatrolPath_CPP() :
 {
 	PrimaryActorTick.bCanEverTick = false;
 
-	pBox_Component = CreateDefaultSubobject<UBoxComponent>(TEXT("pBox_Component"));
-	pBox_Component->SetupAttachment(GetMesh(), FName("s_hand_punch"));
+	//pBox_Component = CreateDefaultSubobject<UBoxComponent>(TEXT("pBox_Component"));
+	//pBox_Component->SetupAttachment(GetMesh(), FName("s_hand_punch"));
 
+	fDamage = 5.f;
+	
+	pCombat_Component_CPP = CreateDefaultSubobject<UCombat_Component_CPP>(TEXT("pCombat_Component_CPP"));
+	pCombat_Component_CPP->Get_pBoxComponent()->SetupAttachment(GetMesh(), FName("s_hand_punch"));
 }
 
 float ANPC_PatrolPath_CPP::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	const float ActualDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-	//const float ActualDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
 	//custom logic in here
 
@@ -44,20 +49,11 @@ float ANPC_PatrolPath_CPP::TakeDamage(float DamageAmount, FDamageEvent const& Da
 	{
 		Destroy();
 	}
-	/*UGameplayStatics::ApplyDamage(this, fPlayerDamage, GetController(), this, nullptr);*/
-	//UGameplayStatics::ApplyDamage(this, DamageAmount, EventInstigator, DamageCauser, nullptr);
-	return DamageAmount;
-}
 
-void ANPC_PatrolPath_CPP::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{
-	if (ACombat_SystemCharacter* Player = Cast<ACombat_SystemCharacter>(OtherActor))
-	{
-		const float fNPCDamage = 1.f;
-		//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, FString::Printf(TEXT("%s OnOverlapBegin | Victim: %s"), *this->GetName(), *OtherActor->GetName()));
-		Player->TakeDamage(fNPCDamage, FDamageEvent(), nullptr, this);
-		pBox_Component->SetGenerateOverlapEvents(false);	//when I hit NPC it prevents me from i.e hitting multiple times
-	}
+	UAISense_Damage::ReportDamageEvent(GetWorld(), this, DamageCauser, DamageAmount, GetActorLocation(), FVector(ForceInit));
+	
+
+	return DamageAmount;
 }
 
 void ANPC_PatrolPath_CPP::Melee_Attack_Implementation()
@@ -97,5 +93,5 @@ void ANPC_PatrolPath_CPP::BeginPlay()
 		GetMesh()->SetMaterial(0, pDynamicMaterial);	//Set the material
 	}
 
-	pBox_Component->OnComponentBeginOverlap.AddDynamic(this, &ANPC_PatrolPath_CPP::OnOverlapBegin);
+	//pBox_Component->OnComponentBeginOverlap.AddDynamic(this, &ANPC_PatrolPath_CPP::OnOverlapBegin);
 }
