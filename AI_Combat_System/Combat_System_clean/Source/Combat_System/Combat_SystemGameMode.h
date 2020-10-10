@@ -14,6 +14,3 @@ class ACombat_SystemGameMode : public AGameModeBase
 public:
 	ACombat_SystemGameMode();
 };
-
-
-

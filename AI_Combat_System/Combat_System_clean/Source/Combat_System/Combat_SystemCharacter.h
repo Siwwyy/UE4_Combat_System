@@ -104,6 +104,10 @@ public:
 		void Melee_Attack();
 	virtual void Melee_Attack_Implementation() override;
 
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Attack")
+		void Block_Hit();
+	virtual void Block_Hit_Implementation() override;
+
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UFUNCTION()

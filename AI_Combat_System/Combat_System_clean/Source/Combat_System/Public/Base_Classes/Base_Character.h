@@ -10,16 +10,12 @@
 UENUM(BlueprintType, Category = "Enums")
 enum class Character_Type : uint8
 {
-	Guard = 0 UMETA(DisplayName = "Guard"),
-	Villager = 1 UMETA(DisplayName = "Villager")
-};
-
-UENUM(BlueprintType, Category = "Enums")
-enum class Character_Behavior : uint8
-{
-	Neutral = 0 UMETA(DisplayName = "Neutral"),
-	Curious = 1 UMETA(DisplayName = "Curious"),
-	Aggressive = 2 UMETA(DisplayName = "Aggressive")
+	Player = 0 UMETA(DisplayName = "Player"),
+	Guard = 1 UMETA(DisplayName = "Guard"),
+	Villager = 2 UMETA(DisplayName = "Villager"),
+	Protector = 3 UMETA(DisplayName = "Villager"),
+	Aggressor = 4 UMETA(DisplayName = "Villager"),
+	Neutral = 5 UMETA(DisplayName = "Villager")
 };
 
 #pragma endregion
@@ -32,9 +28,6 @@ class COMBAT_SYSTEM_API ABase_Character : public ACharacter
 public:
 
 	ABase_Character();
-
-
-
 
 #pragma region Class_Variables
 protected:
@@ -53,10 +46,7 @@ protected:
 protected:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character_Type", meta = (AllowProtectedAccess = "true"))
-	Character_Type Character_Type;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character_Behavior", meta = (AllowProtectedAccess = "true"))
-	Character_Behavior Character_Behavior;
+	Character_Type CharacterType;
 
 #pragma endregion
 #pragma region Class_Setters
@@ -70,6 +60,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Class_Setters")
 		void SetDamage(float Damage);
+
+	UFUNCTION(BlueprintCallable, Category = "Class_Setters")
+		void SetCharacter_Type(Character_Type Character_Type);
 
 #pragma endregion
 #pragma region Class_Getters
@@ -91,6 +84,12 @@ public:
 		FORCEINLINE float Get_fDamage() const
 	{
 		return fDamage;
+	}
+
+	UFUNCTION(BlueprintCallable, Category = "Class_Getters")
+		FORCEINLINE Character_Type Get_CharacterType() const
+	{
+		return CharacterType;
 	}
 
 #pragma endregion

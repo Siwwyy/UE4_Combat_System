@@ -30,7 +30,11 @@
 
 ACombat_SystemCharacter::ACombat_SystemCharacter()
 {
-	fDamage = 10.f;
+	//Member Variables Initialization
+	fDamage = 50.f;
+	CharacterType = Character_Type::Player;
+	//////////////////////////////////////
+	
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 	// set our turn rates for input
@@ -106,8 +110,16 @@ void ACombat_SystemCharacter::Melee_Attack_Implementation()
 {
 	if (ICombatInterfaceCPP* Interface = Cast<ICombatInterfaceCPP>(this))
 	{
-
 		Interface->Execute_Melee_Attack(this);
+	}
+}
+
+void ACombat_SystemCharacter::Block_Hit_Implementation()
+{
+	if (ICombatInterfaceCPP* Interface = Cast<ICombatInterfaceCPP>(this))
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, FString::Printf(TEXT("Take damage NPC:")));
+		Interface->Execute_Block_Hit(this);
 	}
 }
 
@@ -118,6 +130,7 @@ void ACombat_SystemCharacter::SetupPlayerInputComponent(class UInputComponent* P
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 	PlayerInputComponent->BindAction("MeleeAttack", IE_Pressed, this, &ACombat_SystemCharacter::Melee_Attack_Implementation);
+	PlayerInputComponent->BindAction("BlockHit", IE_Pressed, this, &ACombat_SystemCharacter::Block_Hit_Implementation);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &ACombat_SystemCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ACombat_SystemCharacter::MoveRight);

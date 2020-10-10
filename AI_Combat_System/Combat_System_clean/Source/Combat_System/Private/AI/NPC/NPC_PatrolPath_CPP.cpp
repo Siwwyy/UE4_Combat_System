@@ -27,7 +27,10 @@ ANPC_PatrolPath_CPP::ANPC_PatrolPath_CPP() :
 	//pBox_Component = CreateDefaultSubobject<UBoxComponent>(TEXT("pBox_Component"));
 	//pBox_Component->SetupAttachment(GetMesh(), FName("s_hand_punch"));
 
-	fDamage = 5.f;
+	//Member Variables Initialization
+	fDamage = 10.f;
+	CharacterType = Character_Type::Neutral;
+	//////////////////////////////////////
 	
 	pCombat_Component_CPP = CreateDefaultSubobject<UCombat_Component_CPP>(TEXT("pCombat_Component_CPP"));
 	pCombat_Component_CPP->Get_pBoxComponent()->SetupAttachment(GetMesh(), FName("s_hand_punch"));

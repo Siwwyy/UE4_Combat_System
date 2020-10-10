@@ -9,7 +9,7 @@
 #include "NPC_PatrolPath_CPP.generated.h"
 
 
-class UMaterialInstanceDynamic;
+UMaterialInstanceDynamic;
 class APatrol_Path_CPP;
 class AAI_Controller;
 class ACombat_SystemCharacter;
@@ -34,9 +34,6 @@ public:
 
 	UFUNCTION()
 		virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
-
-	//UFUNCTION()
-	//	void OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 #pragma endregion
 #pragma region Class_Setters
@@ -66,16 +63,13 @@ public:
 #pragma endregion
 #pragma region Class_Materials
 private:
-	
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Materials", meta = (AllowPrivateAccess = "true"))
-		UMaterialInstanceDynamic* pDynamicMaterial;
+		class UMaterialInstanceDynamic* pDynamicMaterial;
 
 #pragma endregion
 #pragma region Class_Components
 protected:
-	
-	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"));
-	//class UBoxComponent* pBox_Component;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components", meta = (AllowProtectedAccess = "true"))
 		class UCombat_Component_CPP* pCombat_Component_CPP;
@@ -83,7 +77,7 @@ protected:
 #pragma endregion
 #pragma region Class_Pointers
 private:
-	
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Pointers", meta = (AllowPrivateAccess = "true"))
 		APatrol_Path_CPP* pPatrol_Path;
 

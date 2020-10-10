@@ -39,10 +39,15 @@ void UCombat_Component_CPP::BeginPlay()
 void UCombat_Component_CPP::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if(ABase_Character * Character = Cast< ABase_Character>(GetOwner()))
+	if(OtherActor == GetOwner())	//checking do the owner is an attacked player (prevents from self attack)
 	{
-		OtherActor->TakeDamage(Character->Get_fDamage(), FPointDamageEvent(), Character->GetController(), GetOwner());
+		return;
 	}
 	
-	pBoxComponent->SetGenerateOverlapEvents(false);
+	if(ABase_Character * Character = Cast<ABase_Character>(GetOwner()))
+	{
+		OtherActor->TakeDamage(Character->Get_fDamage(), FPointDamageEvent(), Character->GetController(), Character);
+	}
+	
+	pBoxComponent->SetGenerateOverlapEvents(false);		//when I hit NPC it prevents me from i.e hitting multiple times	
 }
