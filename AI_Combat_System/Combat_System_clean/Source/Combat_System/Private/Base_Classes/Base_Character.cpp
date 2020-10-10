@@ -1,11 +1,15 @@
 
 #include "../../Public/Base_Classes/Base_Character.h"
 
+#include "Containers/EnumAsByte.h"
+
 
 ABase_Character::ABase_Character() :
 	bIsAttacked(false),
 	fHealth(100.f),
-	fDamage(0.f)
+	fDamage(0.f),
+	Character_Type(),
+	Character_Behavior()
 {
 	PrimaryActorTick.bCanEverTick = false;
 
