@@ -118,7 +118,6 @@ void ACombat_SystemCharacter::Block_Hit_Implementation()
 {
 	if (ICombatInterfaceCPP* Interface = Cast<ICombatInterfaceCPP>(this))
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, FString::Printf(TEXT("Take damage NPC:")));
 		Interface->Execute_Block_Hit(this);
 	}
 }
