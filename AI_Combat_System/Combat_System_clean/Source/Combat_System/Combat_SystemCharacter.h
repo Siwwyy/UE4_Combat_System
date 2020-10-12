@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "Public/Interfaces/CombatInterfaceCPP.h"
 #include "Public/Base_Classes/Base_Character.h"
 
 #include "Combat_SystemCharacter.generated.h"
@@ -16,7 +15,7 @@ class ANPC_PatrolPath_CPP;
 
 
 UCLASS(config = Game)
-class ACombat_SystemCharacter : public ABase_Character, public ICombatInterfaceCPP
+class ACombat_SystemCharacter : public ABase_Character
 {
 	GENERATED_BODY()
 	
@@ -27,6 +26,7 @@ public:
 
 #pragma region Class_Components
 protected:
+	
 	/** Camera boom positioning the camera behind the character */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 		class USpringArmComponent* CameraBoom;
@@ -34,9 +34,6 @@ protected:
 	/** Follow camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 		class UCameraComponent* FollowCamera;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components", meta = (AllowProtectedAccess = "true"))
-		class UCombat_Component_CPP* pCombat_Component_CPP;
 
 #pragma endregion
 #pragma region Class_Variables
@@ -100,18 +97,7 @@ protected:
 #pragma region Class_Functions
 public:
 
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Attack")
-		void Melee_Attack();
-	virtual void Melee_Attack_Implementation() override;
-
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Attack")
-		void Block_Hit();
-	virtual void Block_Hit_Implementation() override;
-
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-	UFUNCTION()
-		virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
 #pragma endregion 
 };

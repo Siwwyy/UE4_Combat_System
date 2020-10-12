@@ -3,7 +3,6 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "../../Interfaces/CombatInterfaceCPP.h"
 #include "../../Base_Classes/Base_Character.h"
 
 #include "NPC_PatrolPath_CPP.generated.h"
@@ -16,7 +15,7 @@ class ACombat_SystemCharacter;
 
 
 UCLASS()
-class COMBAT_SYSTEM_API ANPC_PatrolPath_CPP : public ABase_Character, public ICombatInterfaceCPP
+class COMBAT_SYSTEM_API ANPC_PatrolPath_CPP : public ABase_Character
 {
 	GENERATED_BODY()
 
@@ -28,11 +27,6 @@ public:
 
 #pragma region Class_Functions
 
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Class_Functions")
-		void Melee_Attack();
-	virtual void Melee_Attack_Implementation() override;
-
-	UFUNCTION()
 		virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
 #pragma endregion
@@ -61,27 +55,17 @@ public:
 
 
 #pragma endregion
-#pragma region Class_Materials
-private:
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Materials", meta = (AllowPrivateAccess = "true"))
-		class UMaterialInstanceDynamic* pDynamicMaterial;
-
-#pragma endregion
 #pragma region Class_Components
 protected:
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components", meta = (AllowProtectedAccess = "true"))
-		class UCombat_Component_CPP* pCombat_Component_CPP;
 
 #pragma endregion
 #pragma region Class_Pointers
 private:
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Pointers", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Class_Pointers", meta = (AllowPrivateAccess = "true"))
 		APatrol_Path_CPP* pPatrol_Path;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Pointers", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Class_Pointers", meta = (AllowPrivateAccess = "true"))
 		AAI_Controller* pAi_Controller;
 
 	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Pointers", meta = (AllowPrivateAccess = "true"))

@@ -34,7 +34,7 @@ ACombat_SystemCharacter::ACombat_SystemCharacter()
 	fDamage = 50.f;
 	CharacterType = Character_Type::Player;
 	//////////////////////////////////////
-	
+
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 	// set our turn rates for input
@@ -58,10 +58,6 @@ ACombat_SystemCharacter::ACombat_SystemCharacter()
 	CameraBoom->TargetArmLength = 300.0f; // The camera follows at this distance behind the character	
 	CameraBoom->bUsePawnControlRotation = true; // Rotate the arm based on the controller
 
-
-	//pBox_Component = CreateDefaultSubobject<UBoxComponent>(TEXT("pBox_Component"));
-	//pBox_Component->SetupAttachment(GetMesh(), FName("s_hand_punch"));
-
 	// Create a follow camera
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
@@ -69,21 +65,10 @@ ACombat_SystemCharacter::ACombat_SystemCharacter()
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
 
-	pCombat_Component_CPP = CreateDefaultSubobject<UCombat_Component_CPP>(TEXT("pCombat_Component_CPP"));
+
 	pCombat_Component_CPP->Get_pBoxComponent()->SetupAttachment(GetMesh(), FName("hand_r"));
-	//pCombat_Component_CPP->Get_pBoxComponent()->RegisterComponent();
-	/*pCombat_Component_CPP->Get_pBoxComponent()->SetupAttachment(RootComponent);*/
-	//pCombat_Component_CPP->Set_Attach_pBox_Component_To_Bone(GetMesh(), FName("hand_r"));
-	//pCombat_Component_CPP->Get_pBoxComponent()->SetupAttachment(GetMesh(), FName("hand_r"));
-	//pCombat_Component_CPP->Get_pStaticMeshComponent()->SetWorldTransform(FTransform(FVector(10.f, 10.f, 10.f)));
-	//pCombat_Component_CPP->Get_pStaticMeshComponent()->SetWorldScale3D(FVector(10.f, 10.f, 10.f));
-	//pCombat_Component_CPP->Get_pStaticMeshComponent()->SetupAttachment(RootComponent);
-	//AddOwnedComponent(pCombat_Component_CPP);
-	//pCombat_Component_CPP->RegisterComponent();
-	//
-	//
-	//
-	//
+
+	
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character)
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
 }
@@ -93,34 +78,31 @@ void ACombat_SystemCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// set material color of character
-	UMaterialInstanceDynamic* const material_instance = UMaterialInstanceDynamic::Create(GetMesh()->GetMaterial(0), this);
-	if (material_instance)
+	if (pDynamicMaterial)
 	{
-		material_instance->SetVectorParameterValue("BodyColor", FLinearColor(0.0f, 1.0f, 1.0f, 0.1f));
-		GetMesh()->SetMaterial(0, material_instance);
+		pDynamicMaterial->SetVectorParameterValue("BodyColor", FLinearColor(0.0f, 1.0f, 1.0f, 0.1f));
+		GetMesh()->SetMaterial(0, pDynamicMaterial);
 	}
-
 }
 
 //////////////////////////////////////////////////////////////////////////
 // Input
 
-void ACombat_SystemCharacter::Melee_Attack_Implementation()
-{
-	if (ICombatInterfaceCPP* Interface = Cast<ICombatInterfaceCPP>(this))
-	{
-		Interface->Execute_Melee_Attack(this);
-	}
-}
-
-void ACombat_SystemCharacter::Block_Hit_Implementation()
-{
-	if (ICombatInterfaceCPP* Interface = Cast<ICombatInterfaceCPP>(this))
-	{
-		Interface->Execute_Block_Hit(this);
-	}
-}
+//void ACombat_SystemCharacter::Melee_Attack_Implementation()
+//{
+//	if (ICombatInterfaceCPP* Interface = Cast<ICombatInterfaceCPP>(this))
+//	{
+//		Interface->Execute_Melee_Attack(this);
+//	}
+//}
+//
+//void ACombat_SystemCharacter::Block_Hit_Implementation()
+//{
+//	if (ICombatInterfaceCPP* Interface = Cast<ICombatInterfaceCPP>(this))
+//	{
+//		Interface->Execute_Block_Hit(this);
+//	}
+//}
 
 void ACombat_SystemCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
 {
@@ -150,35 +132,35 @@ void ACombat_SystemCharacter::SetupPlayerInputComponent(class UInputComponent* P
 	PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &ACombat_SystemCharacter::OnResetVR);
 }
 
-float ACombat_SystemCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
-	AController* EventInstigator, AActor* DamageCauser)
-{
-	const float ActualDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-
-	//custom logic in here
-	//if (ACombat_SystemCharacter* Player = Cast<ACombat_SystemCharacter>(DamageCauser))
-	//{
-	//	/*bIsAttacked = true;
-	//	pAttacking_Player = Player;*/
-	//	//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, FString::Printf(TEXT("Take damage NPC: %s"), *DamageCauser->GetName()));
-	//	//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, FString::Printf(TEXT("Take damage Player: %s"), *DamageCauser->GetName()));
-	//	fHealth -= DamageAmount;
-
-	//	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, FString::Printf(TEXT("ACombat_SystemCharacter health: %f"), fHealth));
-	//}
-	
-	bIsAttacked = true;
-	fHealth -= DamageAmount;
-
-	DrawDebugString(GetWorld(), DamageCauser->GetActorLocation(), FString::Printf(TEXT("ACombat_SystemCharacter health: %f"), fHealth), 0, FColor::Blue, 0.4f, false, 3.f);
-
-	if(fHealth <= 0.f)
-	{
-		Destroy();
-	}
-
-	return ActualDamage;
-}
+//float ACombat_SystemCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
+//	AController* EventInstigator, AActor* DamageCauser)
+//{
+//	const float ActualDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+//
+//	//custom logic in here
+//	//if (ACombat_SystemCharacter* Player = Cast<ACombat_SystemCharacter>(DamageCauser))
+//	//{
+//	//	/*bIsAttacked = true;
+//	//	pAttacking_Player = Player;*/
+//	//	//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, FString::Printf(TEXT("Take damage NPC: %s"), *DamageCauser->GetName()));
+//	//	//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, FString::Printf(TEXT("Take damage Player: %s"), *DamageCauser->GetName()));
+//	//	fHealth -= DamageAmount;
+//
+//	//	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, FString::Printf(TEXT("ACombat_SystemCharacter health: %f"), fHealth));
+//	//}
+//
+//	bIsAttacked = true;
+//	fHealth -= DamageAmount;
+//
+//	DrawDebugString(GetWorld(), DamageCauser->GetActorLocation(), FString::Printf(TEXT("ACombat_SystemCharacter health: %f"), fHealth), 0, FColor::Blue, 0.4f, false, 3.f);
+//
+//	if (fHealth <= 0.f)
+//	{
+//		Destroy();
+//	}
+//
+//	return ActualDamage;
+//}
 
 //void ACombat_SystemCharacter::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 //{
