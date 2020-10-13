@@ -9,9 +9,7 @@
 
 #include "Materials/MaterialInstanceDynamic.h"
 
-#include "Kismet/GameplayStatics.h"
-
-#include "Components/BoxComponent.h"
+#include "Components/SphereComponent.h"
 #include "Components/Combat_Component_CPP.h"
 #include "Perception/AISense_Damage.h"
 
@@ -29,7 +27,7 @@ ANPC_PatrolPath_CPP::ANPC_PatrolPath_CPP() :
 	//////////////////////////////////////
 	
 
-	pCombat_Component_CPP->Get_pBoxComponent()->SetupAttachment(GetMesh(), FName("s_hand_punch"));
+	pCombat_Component_CPP->Get_pSphereComponent()->SetupAttachment(GetMesh(), FName("s_hand_punch"));
 }
 
 void ANPC_PatrolPath_CPP::BeginPlay()

@@ -1,92 +1,116 @@
 
 
 #include "Components/Combat_Component_CPP.h"
-#include "Combat_System/Combat_SystemCharacter.h"
 
-#include "Components/BoxComponent.h"
-#include "Components/StaticMeshComponent.h"
+
+#include "DrawDebugHelpers.h"
+#include "Combat_System/Combat_SystemCharacter.h"
+#include "AI/NPC/NPC_PatrolPath_CPP.h"
+
+#include "Components/SphereComponent.h"
 
 #include "Engine/EngineTypes.h"
 #include "TimerManager.h"
+
+#include "Math/UnrealMathUtility.h"
 
 
 UCombat_Component_CPP::UCombat_Component_CPP()
 {
 	PrimaryComponentTick.bCanEverTick = false;
 
-	/* BOX COMPONENT*/
-	pBoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("pBoxComponent"));
-	pBoxComponent->SetBoxExtent(FVector(10.f, 10.f, 10.f));
-	pBoxComponent->SetVisibility(true);
-	pBoxComponent->SetHiddenInGame(false);
+	/* SPHERE COMPONENT*/
+	pSphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("pSphereComponent"));
+	pSphereComponent->SetSphereRadius(10.f);
+	pSphereComponent->SetVisibility(true);
+	pSphereComponent->SetHiddenInGame(false);
 
-	//GetWorld()->GetTimerManager().SetTimer();
-
-	//pStaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("pStaticMeshComponent"));
-	//if (GetOwner())
-	//{
-	//	GetOwner()->AddOwnedComponent(this);
-	//}
-	//if (ACombat_SystemCharacter* Character = Cast<ACombat_SystemCharacter>(GetOwner()))
-	//{
-	//	pStaticMeshComponent->AttachToComponent(Character->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("hand_r"));
-	//}
 }
 
 void UCombat_Component_CPP::BeginPlay()
 {
 	Super::BeginPlay();
 
-	//GetWorld()->GetTimerManager().SetTimer();	//set timer to count time of "beeing aggressive of npc"
-
-	pBoxComponent->OnComponentBeginOverlap.AddDynamic(this, &UCombat_Component_CPP::OnOverlapBegin);
-	pBoxComponent->OnComponentEndOverlap.AddDynamic(this, &UCombat_Component_CPP::OnOverlapEnd);
+	pSphereComponent->OnComponentBeginOverlap.AddDynamic(this, &UCombat_Component_CPP::OnOverlapBegin);
+	pSphereComponent->OnComponentEndOverlap.AddDynamic(this, &UCombat_Component_CPP::OnOverlapEnd);
 }
 
 void UCombat_Component_CPP::Receive_Damage(AActor* const HitPlayer, ABase_Character* const CompOwner)
-{
+
+{	if (!HitPlayer || !CompOwner)
+	{
+		return;
+	}
 	HitPlayer->TakeDamage(CompOwner->Get_fDamage(), FPointDamageEvent(), CompOwner->GetController(), CompOwner);
+}
+
+void UCombat_Component_CPP::Dodge_Damage(class ABase_Character* const CompOwner)
+{
+	if (ANPC_PatrolPath_CPP* NPC = Cast<ANPC_PatrolPath_CPP>(CompOwner))
+	{
+		NPC->Block_Hit_Implementation();
+		DrawDebugString(NPC->GetWorld(), FVector(NPC->GetActorLocation().X, NPC->GetActorLocation().Y, NPC->GetActorLocation().Z + 220.f), FString::Printf(TEXT("Current health: %f"), NPC->Get_fHealth()), 0, FColor::Red, 0.4f, false, 3.f);
+	}
 }
 
 void UCombat_Component_CPP::Calm_Player(class ABase_Character* const CharacterToCalm)
 {
+	if (!CharacterToCalm)
+	{
+		return;
+	}
 	CharacterToCalm->SetIsAttacked(false);
+	CharacterToCalm->SetIsBlockingHit(false);
 }
 
 void UCombat_Component_CPP::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (OtherActor == GetOwner())	//checking do the owner is an attacked player (prevents from self attack)
+	const FString HitPlayer = OtherActor->GetName();
+	const FString CompOwner = GetOwner()->GetName();
+	if (OtherActor == GetOwner() || HitPlayer == CompOwner)	//checking do the owner is an attacked player (prevents from self attack)
 	{
 		return;
 	}
-
-	if (ABase_Character* Character = Cast<ABase_Character>(GetOwner()))
+	
+	if (ABase_Character* Owner = Cast<ABase_Character>(GetOwner()))
 	{
-		ABase_Character* NPC = Cast<ABase_Character>(OtherActor);
-		Receive_Damage(OtherActor, Character);
-
-		const FTimerDelegate RespawnDelegate = FTimerDelegate::CreateUObject( this, &UCombat_Component_CPP::Calm_Player, NPC );
-		
-		GetWorld()->GetTimerManager().SetTimer(StopWatch, RespawnDelegate, 5.0f, false);
+		ABase_Character* Actor = Cast<ABase_Character>(OtherActor);
+		Dodge_Damage(Owner);
+		Receive_Damage(OtherActor, Owner);
 	}
+	
 	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, FString::Printf(TEXT("OnOverlapBegin")));
-	pBoxComponent->SetGenerateOverlapEvents(false);		//when I hit NPC it prevents me from i.e hitting multiple times	
+	
+	pSphereComponent->SetGenerateOverlapEvents(false);		//when I hit NPC it prevents me from i.e hitting multiple times	
 }
 
 void UCombat_Component_CPP::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	if (OtherActor == GetOwner())	//checking do the owner is an attacked player (prevents from self attack)
+	const FString HitPlayer = OtherActor->GetName();
+	const FString CompOwner = GetOwner()->GetName();
+	if (OtherActor == GetOwner() || HitPlayer == CompOwner)	//checking do the owner is an attacked player (prevents from self attack) or is the same class type
 	{
 		return;
 	}
 
-	//if (ABase_Character* Character = Cast<ABase_Character>(OtherActor))
-	//{
-	//	Character->SetIsAttacked(false);
-	//}
+	if (ABase_Character* Owner = Cast<ABase_Character>(GetOwner()))
+	{
+		ABase_Character* Actor = Cast<ABase_Character>(OtherActor);
+
+
+	/*	const int32 temp = FMath::RandRange(0, 5);
+		if(temp == 2)
+		{
+			Dodge_Damage(Owner);
+		}*/
+		//Dodge_Damage(Owner);s
+
+		const FTimerDelegate CalmPlayerDelegate = FTimerDelegate::CreateUObject( this, &UCombat_Component_CPP::Calm_Player, Actor );
+		GetWorld()->GetTimerManager().SetTimer(StopWatch, CalmPlayerDelegate, 2.0f, false);
+	}
 
 	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, FString::Printf(TEXT("OnOverlapEnd")));
 
-	pBoxComponent->SetGenerateOverlapEvents(false);		//when I hit NPC it prevents me from i.e hitting multiple times	
+	pSphereComponent->SetGenerateOverlapEvents(false);		//when I hit NPC it prevents me from i.e hitting multiple times	
 }

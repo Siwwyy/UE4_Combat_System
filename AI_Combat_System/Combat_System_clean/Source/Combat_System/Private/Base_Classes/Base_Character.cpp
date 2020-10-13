@@ -4,7 +4,6 @@
 #include "Components/Combat_Component_CPP.h"
 
 #include "DrawDebugHelpers.h"
-#include "TimerManager.h"
 
 
 ABase_Character::ABase_Character() :
@@ -39,6 +38,7 @@ void ABase_Character::Block_Hit_Implementation()
 {
 	if (ICombatInterfaceCPP* Interface = Cast<ICombatInterfaceCPP>(this))
 	{
+		IsBlockingHit = true;
 		Interface->Execute_Block_Hit(this);
 	}
 }
@@ -47,11 +47,18 @@ float ABase_Character::TakeDamage(float DamageAmount, FDamageEvent const& Damage
 	AActor* DamageCauser)
 {
 	const float ActualDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-	
-	bIsAttacked = true;
-	fHealth -= DamageAmount;
 
-	DrawDebugString(GetWorld(), DamageCauser->GetActorLocation(), FString::Printf(TEXT("Current Class health: %f"), fHealth), 0, FColor::Blue, 0.4f, false, 3.f);
+	if (CharacterType != Character_Type::Aggressor)
+	{
+		bIsAttacked = true;
+	}
+
+	if (IsBlockingHit == false)
+	{
+		fHealth -= DamageAmount;
+	}
+
+	DrawDebugString(GetWorld(), FVector(DamageCauser->GetActorLocation().X, DamageCauser->GetActorLocation().Y, DamageCauser->GetActorLocation().Z + 120.f), FString::Printf(TEXT("Current health: %f"), fHealth), 0, FColor::Orange, 0.4f, false, 3.f);
 
 	if (fHealth <= 0.f)
 	{
@@ -61,14 +68,14 @@ float ABase_Character::TakeDamage(float DamageAmount, FDamageEvent const& Damage
 	return ActualDamage;
 }
 
-void ABase_Character::Making_Furious()
-{
-
-}
-
 void ABase_Character::SetIsAttacked(bool IsAttacked)
 {
 	bIsAttacked = IsAttacked;
+}
+
+void ABase_Character::SetIsBlockingHit(bool BlockingHit)
+{
+	IsBlockingHit = BlockingHit;
 }
 
 void ABase_Character::SetHealth(float Health)
@@ -83,5 +90,13 @@ void ABase_Character::SetDamage(float Damage)
 
 void ABase_Character::SetCharacter_Type(::Character_Type Character_Type)
 {
+	if (CharacterType == Character_Type::Aggressor)
+	{
+		SetIsAttacked(true);
+	}
+	else
+	{
+		SetIsAttacked(false);
+	}
 	CharacterType = Character_Type;
 }

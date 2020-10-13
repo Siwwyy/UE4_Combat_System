@@ -1,7 +1,6 @@
 #include "../Public/NPC_SpawnerCPP.h"
 
-#include "Math/UnrealMathUtility.h"
-#include "Math/TransformNonVectorized.h"
+
 #include "Engine/EngineTypes.h"
 #include "TimerManager.h"
 #include "GameFramework/Actor.h"
@@ -41,6 +40,7 @@ void ANPC_SpawnerCPP::Spawn_NPC() const
 		ANPC_PatrolPath_CPP* NPC = world->SpawnActorDeferred<ANPC_PatrolPath_CPP>(pNPC, SpawnLocAndRotation);
 		if (NPC)
 		{
+			//NPC->SetCharacter_Type(Character_Type::Aggressor);
 			NPC->Set_pPatrol_Path(pPatrol_Path);
 			NPC->FinishSpawning(SpawnLocAndRotation);
 		}

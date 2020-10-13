@@ -21,17 +21,14 @@ public:
 #pragma region Class_Variables
 protected:
 
-		FTimerHandle StopWatch;
+	FTimerHandle StopWatch;
 
 #pragma endregion 
 #pragma region Class_Components
 protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components", meta = (AllowProtectedAccess = "true"))
-		class UBoxComponent* pBoxComponent;
-
-	/*UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components", meta = (AllowProtectedAccess = "true"))
-		class USphereComponent* pBoxComponent;*/
+		class USphereComponent* pSphereComponent;
 
 #pragma endregion 
 #pragma region Class_Functions
@@ -39,7 +36,9 @@ protected:
 
 	virtual void BeginPlay() override;
 
-	void Receive_Damage(AActor* const HitPlayer, class ABase_Character* const CompOwner);
+	static void Receive_Damage(AActor* const HitPlayer, class ABase_Character* const CompOwner);
+	
+	static void Dodge_Damage(class ABase_Character* const CompOwner);
 
 	void Calm_Player(class ABase_Character* const CharacterToCalm);
 
@@ -60,9 +59,9 @@ public:
 public:
 
 	UFUNCTION(BlueprintCallable, Category = "Class_Getters")
-		FORCEINLINE class UBoxComponent* Get_pBoxComponent() const
+		FORCEINLINE class USphereComponent* Get_pSphereComponent() const
 	{
-		return pBoxComponent;
+		return pSphereComponent;
 	}
 
 #pragma endregion 

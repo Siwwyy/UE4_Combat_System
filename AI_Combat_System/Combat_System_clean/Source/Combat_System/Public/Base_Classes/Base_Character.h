@@ -40,6 +40,9 @@ protected:
 		bool bIsAttacked;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Class_Variables", meta = (AllowProtectedAccess = "true"))
+		bool IsBlockingHit;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Class_Variables", meta = (AllowProtectedAccess = "true"))
 		float fHealth;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Class_Variables", meta = (AllowProtectedAccess = "true"))
@@ -84,15 +87,15 @@ public:
 	UFUNCTION()
 		virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
-	UFUNCTION(BlueprintCallable, Category = "Class_Functions")
-		void Making_Furious();
-
 #pragma endregion
 #pragma region Class_Setters
 public:
 
 	UFUNCTION(BlueprintCallable, Category = "Class_Setters")
 		void SetIsAttacked(bool IsAttacked);
+
+	UFUNCTION(BlueprintCallable, Category = "Class_Setters")
+		void SetIsBlockingHit(bool BlockingHit);
 
 	UFUNCTION(BlueprintCallable, Category = "Class_Setters")
 		void SetHealth(float Health);
@@ -112,7 +115,13 @@ public:
 	{
 		return bIsAttacked;
 	}
-
+	
+	UFUNCTION(BlueprintCallable, Category = "Class_Getters")
+		FORCEINLINE bool Get_IsBlockingHit() const
+	{
+		return IsBlockingHit;
+	}
+	
 	UFUNCTION(BlueprintCallable, Category = "Class_Getters")
 		FORCEINLINE float Get_fHealth() const
 	{

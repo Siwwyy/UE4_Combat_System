@@ -7,20 +7,14 @@
 
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
-#include "Components/BoxComponent.h"
+#include "Components/SphereComponent.h"
 
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Materials/MaterialInstanceDynamic.h"
-#include "Engine/Engine.h"
-
-
-#include "DrawDebugHelpers.h"
 
 #include "Kismet/GameplayStatics.h"
-#include "Kismet/KismetSystemLibrary.h"
-#include "Perception/AISense_Damage.h"
 
 #include "Public/AI/NPC/NPC_PatrolPath_CPP.h"
 #include "Public/Components/Combat_Component_CPP.h"
@@ -31,7 +25,7 @@
 ACombat_SystemCharacter::ACombat_SystemCharacter()
 {
 	//Member Variables Initialization
-	fDamage = 50.f;
+	fDamage = 5.f;
 	CharacterType = Character_Type::Player;
 	//////////////////////////////////////
 
@@ -66,7 +60,7 @@ ACombat_SystemCharacter::ACombat_SystemCharacter()
 
 
 
-	pCombat_Component_CPP->Get_pBoxComponent()->SetupAttachment(GetMesh(), FName("hand_r"));
+	pCombat_Component_CPP->Get_pSphereComponent()->SetupAttachment(GetMesh(), FName("hand_r"));
 
 	
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character)
@@ -87,22 +81,6 @@ void ACombat_SystemCharacter::BeginPlay()
 
 //////////////////////////////////////////////////////////////////////////
 // Input
-
-//void ACombat_SystemCharacter::Melee_Attack_Implementation()
-//{
-//	if (ICombatInterfaceCPP* Interface = Cast<ICombatInterfaceCPP>(this))
-//	{
-//		Interface->Execute_Melee_Attack(this);
-//	}
-//}
-//
-//void ACombat_SystemCharacter::Block_Hit_Implementation()
-//{
-//	if (ICombatInterfaceCPP* Interface = Cast<ICombatInterfaceCPP>(this))
-//	{
-//		Interface->Execute_Block_Hit(this);
-//	}
-//}
 
 void ACombat_SystemCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
 {

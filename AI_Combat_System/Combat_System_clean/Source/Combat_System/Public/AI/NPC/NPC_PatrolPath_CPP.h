@@ -68,9 +68,6 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Class_Pointers", meta = (AllowPrivateAccess = "true"))
 		AAI_Controller* pAi_Controller;
 
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Pointers", meta = (AllowPrivateAccess = "true"))
-	ACombat_SystemCharacter* pAttacking_Player;
-
 #pragma endregion
 #pragma region Class_Variables
 protected:
