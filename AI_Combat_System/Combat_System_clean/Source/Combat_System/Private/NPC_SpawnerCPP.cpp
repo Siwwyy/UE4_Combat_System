@@ -6,10 +6,11 @@
 #include "GameFramework/Actor.h"
 
 #include "../Public/AI/NPC/NPC_PatrolPath_CPP.h"
+#include "Logic/Combat_System_Logic.h"
 
 ANPC_SpawnerCPP::ANPC_SpawnerCPP() :
 	pStatic_Mesh(CreateDefaultSubobject<UStaticMeshComponent>("UStaticMeshComponent")),
-	SpawnTimerHandle(),
+	SpawnTimerHandle({}),
 	pPatrol_Path(nullptr),
 	pNPC(nullptr)
 {
@@ -42,6 +43,7 @@ void ANPC_SpawnerCPP::Spawn_NPC() const
 		{
 			//NPC->SetCharacter_Type(Character_Type::Aggressor);
 			NPC->Set_pPatrol_Path(pPatrol_Path);
+			pCombat_System_Logic->Add_NPC(NPC);
 			NPC->FinishSpawning(SpawnLocAndRotation);
 		}
 	}

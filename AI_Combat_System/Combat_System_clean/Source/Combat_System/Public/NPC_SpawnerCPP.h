@@ -40,6 +40,9 @@ protected:
 		APatrol_Path_CPP* pPatrol_Path;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Class_Pointers", meta = (AllowProtectedAccess = "true"))
+		class ACombat_System_Logic* pCombat_System_Logic;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Class_Pointers", meta = (AllowProtectedAccess = "true"))
 		TSubclassOf<ANPC_PatrolPath_CPP> pNPC;
 
 #pragma endregion
