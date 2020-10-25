@@ -54,15 +54,15 @@ void UCombat_Component_CPP::BeginPlay()
 //	}
 //}
 //
-//void UCombat_Component_CPP::Calm_Player(class ABase_Character* const CharacterToCalm)
-//{
-//	if (!CharacterToCalm)
-//	{
-//		return;
-//	}
-//	CharacterToCalm->SetIsAttacked(false);
-//	CharacterToCalm->SetIsBlockingHit(false);
-//}
+void UCombat_Component_CPP::Calm_Player(class ABase_Character* const CharacterToCalm)
+{
+	if (!CharacterToCalm)
+	{
+		return;
+	}
+	CharacterToCalm->SetIsAttacked(false);
+	CharacterToCalm->SetIsBlockingHit(false);
+}
 
 void UCombat_Component_CPP::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -78,10 +78,9 @@ void UCombat_Component_CPP::OnOverlapBegin(UPrimitiveComponent* OverlappedCompon
 	
 	if (ABase_Character* Owner = Cast<ABase_Character>(GetOwner()))
 	{
-		ACombat_System_Logic::Attack_NPC(Owner);
+		//ACombat_System_Logic::Attack_NPC(Owner);
 		
 		OtherActor->TakeDamage(Owner->Get_fDamage(), FPointDamageEvent(), Owner->GetController(), Owner);
-
 		
 		//Dodge_Damage(Owner);
 		//Receive_Damage(OtherActor, Owner);
@@ -101,9 +100,9 @@ void UCombat_Component_CPP::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AA
 		return;
 	}
 
-	//if (ABase_Character* Owner = Cast<ABase_Character>(GetOwner()))
-	//{
-	//	ABase_Character* Actor = Cast<ABase_Character>(OtherActor);
+	if (ABase_Character* Owner = Cast<ABase_Character>(GetOwner()))
+	{
+		ABase_Character* Actor = Cast<ABase_Character>(OtherActor);
 
 
 	///*	const int32 temp = FMath::RandRange(0, 5);
@@ -113,9 +112,9 @@ void UCombat_Component_CPP::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AA
 	//	}*/
 	//	//Dodge_Damage(Owner);
 
-	//	const FTimerDelegate CalmPlayerDelegate = FTimerDelegate::CreateUObject( this, &UCombat_Component_CPP::Calm_Player, Actor );
-	//	GetWorld()->GetTimerManager().SetTimer(StopWatch, CalmPlayerDelegate, 2.0f, false);
-	//}
+		const FTimerDelegate CalmPlayerDelegate = FTimerDelegate::CreateUObject( this, &UCombat_Component_CPP::Calm_Player, Actor );
+		GetWorld()->GetTimerManager().SetTimer(StopWatch, CalmPlayerDelegate, 2.0f, false);
+	}
 
 	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, FString::Printf(TEXT("OnOverlapEnd")));
 

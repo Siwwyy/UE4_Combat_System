@@ -48,15 +48,15 @@ float ABase_Character::TakeDamage(float DamageAmount, FDamageEvent const& Damage
 {
 	const float ActualDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
-	/*if (CharacterType != Character_Type::Aggressor)
+	if (CharacterType != Character_Type::Aggressor)
 	{
 		bIsAttacked = true;
 	}
 
-	if (IsBlockingHit == false)
-	{
-		fHealth -= DamageAmount;
-	}*/
+	//if (IsBlockingHit == false)
+	//{
+	//	fHealth -= DamageAmount;
+	//}
 
 	if (IsBlockingHit == false)
 	{
