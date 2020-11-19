@@ -3,7 +3,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+
 #include "Interfaces/CombatInterfaceCPP.h"
+#include "GenericTeamAgentInterface.h"
 
 #include "Base_Character.generated.h"
 
@@ -25,7 +27,7 @@ enum class Character_Type : uint8
 #pragma endregion
 
 UCLASS()
-class COMBAT_SYSTEM_API ABase_Character : public ACharacter, public ICombatInterfaceCPP
+class COMBAT_SYSTEM_API ABase_Character : public ACharacter, public ICombatInterfaceCPP, public IGenericTeamAgentInterface
 {
 	GENERATED_BODY()
 
@@ -47,6 +49,8 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Class_Variables", meta = (AllowProtectedAccess = "true"))
 		float fDamage;
+
+	FGenericTeamId TeamId;
 
 #pragma endregion
 #pragma region Class_Materials
@@ -115,13 +119,13 @@ public:
 	{
 		return bIsAttacked;
 	}
-	
+
 	UFUNCTION(BlueprintCallable, Category = "Class_Getters")
 		FORCEINLINE bool Get_IsBlockingHit() const
 	{
 		return IsBlockingHit;
 	}
-	
+
 	UFUNCTION(BlueprintCallable, Category = "Class_Getters")
 		FORCEINLINE float Get_fHealth() const
 	{
@@ -132,6 +136,11 @@ public:
 		FORCEINLINE float Get_fDamage() const
 	{
 		return fDamage;
+	}
+
+	FORCEINLINE virtual FGenericTeamId GetGenericTeamId() const override
+	{
+		return TeamId;
 	}
 
 	UFUNCTION(BlueprintCallable, Category = "Class_Getters")

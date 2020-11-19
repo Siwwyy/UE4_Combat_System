@@ -1,5 +1,11 @@
 
 
+
 #include "../../../Public/AI/Controllers/AI_Controller.h"
 
-#include "../../../Public/AI/NPC/NPC_PatrolPath_CPP.h"
+
+AAI_Controller::AAI_Controller(const FObjectInitializer& ObjectInitializer) :
+	Super(ObjectInitializer)
+{
+	SetGenericTeamId(FGenericTeamId(1));
+}

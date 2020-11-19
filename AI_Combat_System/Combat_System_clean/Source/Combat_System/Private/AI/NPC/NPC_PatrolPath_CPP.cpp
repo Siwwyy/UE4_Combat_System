@@ -24,6 +24,7 @@ ANPC_PatrolPath_CPP::ANPC_PatrolPath_CPP() :
 	//Member Variables Initialization
 	fDamage = 1.f;
 	CharacterType = Character_Type::Neutral;
+	TeamId = FGenericTeamId(1);	//friendly
 	//////////////////////////////////////
 	
 

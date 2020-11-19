@@ -64,8 +64,7 @@ void UCombat_Component_CPP::Calm_Player(class ABase_Character* const CharacterTo
 	CharacterToCalm->SetIsBlockingHit(false);
 }
 
-void UCombat_Component_CPP::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+void UCombat_Component_CPP::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	const FString HitPlayer = OtherActor->GetName();
 	const FString CompOwner = GetOwner()->GetName();

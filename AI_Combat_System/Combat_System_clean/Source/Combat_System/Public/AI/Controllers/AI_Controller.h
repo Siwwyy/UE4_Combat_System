@@ -13,19 +13,17 @@ class COMBAT_SYSTEM_API AAI_Controller : public AAIController
 {
 	GENERATED_BODY()
 
-public:
-
-#pragma region Class_Getters
-
-	UFUNCTION(BlueprintCallable, Category = "Class_Getters")
-		FORCEINLINE ANPC_PatrolPath_CPP* Get_pAi_Controller() const
-	{
-		return pPatrolPath_NPC;
-	}
+#pragma region Class_Constructors_Public
+	
+		AAI_Controller(const FObjectInitializer& ObjectInitializer);
+	
+#pragma endregion
+#pragma region Class_Pointers_Protected
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Class_Pointers_Protected", meta = (AllowProtectedAccess = "true"))
+		ANPC_PatrolPath_CPP* pPatrolPath_NPC;
 
 #pragma endregion
-
-
 private:
 	enum class NPC_Character_Type
 	{
@@ -34,11 +32,14 @@ private:
 		Aggressive
 	};
 
-#pragma region Class_Pointers
+#pragma region Class_Getters_Public
+public:
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Pointers", meta = (AllowPrivateAccess = "true"))
-		ANPC_PatrolPath_CPP* pPatrolPath_NPC;
+	UFUNCTION(BlueprintCallable, Category = "Class_Getters_Public")
+		FORCEINLINE ANPC_PatrolPath_CPP* Get_pAi_Controller() const
+	{
+		return pPatrolPath_NPC;
+	}
 
 #pragma endregion
-
 };
