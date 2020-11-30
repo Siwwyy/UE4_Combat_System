@@ -56,6 +56,8 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "Class_Functions")
 	void Spawn_NPC() const;
 
+	class Foo w();
+
 #pragma endregion
 
 };
