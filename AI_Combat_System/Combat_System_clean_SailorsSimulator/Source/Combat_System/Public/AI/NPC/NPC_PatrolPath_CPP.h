@@ -8,10 +8,8 @@
 #include "NPC_PatrolPath_CPP.generated.h"
 
 
-UMaterialInstanceDynamic;
 class APatrol_Path_CPP;
 class AAI_Controller;
-class ACombat_SystemCharacter;
 
 
 UCLASS()

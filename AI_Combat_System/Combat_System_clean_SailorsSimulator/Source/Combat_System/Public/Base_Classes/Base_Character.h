@@ -66,7 +66,6 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components", meta = (AllowProtectedAccess = "true"))
 		class UCombat_Component_CPP* pCombat_Component_CPP;
 
-
 #pragma endregion
 #pragma region Class_Enums
 protected:

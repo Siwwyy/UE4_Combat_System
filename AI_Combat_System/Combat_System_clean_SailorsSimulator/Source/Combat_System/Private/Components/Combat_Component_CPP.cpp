@@ -2,18 +2,13 @@
 
 #include "Components/Combat_Component_CPP.h"
 
-
-#include "DrawDebugHelpers.h"
-#include "Combat_System/Combat_SystemCharacter.h"
 #include "AI/NPC/NPC_PatrolPath_CPP.h"
 
 #include "Components/SphereComponent.h"
 
 #include "Engine/EngineTypes.h"
 #include "TimerManager.h"
-#include "Logic/Combat_System_Logic.h"
 
-#include "Math/UnrealMathUtility.h"
 
 
 UCombat_Component_CPP::UCombat_Component_CPP()
@@ -36,24 +31,6 @@ void UCombat_Component_CPP::BeginPlay()
 	pSphereComponent->OnComponentEndOverlap.AddDynamic(this, &UCombat_Component_CPP::OnOverlapEnd);
 }
 
-//void UCombat_Component_CPP::Receive_Damage(AActor* const HitPlayer, ABase_Character* const CompOwner)
-//
-//{	if (!HitPlayer || !CompOwner)
-//	{
-//		return;
-//	}
-//	HitPlayer->TakeDamage(CompOwner->Get_fDamage(), FPointDamageEvent(), CompOwner->GetController(), CompOwner);
-//}
-//
-//void UCombat_Component_CPP::Dodge_Damage(class ABase_Character* const CompOwner)
-//{
-//	if (ANPC_PatrolPath_CPP* NPC = Cast<ANPC_PatrolPath_CPP>(CompOwner))
-//	{
-//		NPC->Block_Hit_Implementation();
-//		DrawDebugString(NPC->GetWorld(), FVector(NPC->GetActorLocation().X, NPC->GetActorLocation().Y, NPC->GetActorLocation().Z + 220.f), FString::Printf(TEXT("Current health: %f"), NPC->Get_fHealth()), 0, FColor::Red, 0.4f, false, 3.f);
-//	}
-//}
-//
 void UCombat_Component_CPP::Calm_Player(class ABase_Character* const CharacterToCalm)
 {
 	if (!CharacterToCalm)

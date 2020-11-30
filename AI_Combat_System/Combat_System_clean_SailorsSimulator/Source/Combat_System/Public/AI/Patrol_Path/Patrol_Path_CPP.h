@@ -6,8 +6,6 @@
 #include "Patrol_Path_CPP.generated.h"
 
 
-class USceneComponent;
-
 
 UCLASS(Blueprintable)
 class COMBAT_SYSTEM_API APatrol_Path_CPP : public AActor
@@ -49,7 +47,7 @@ protected:
 #pragma region Class_Components
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowProtectedAccess = "true"))
-		USceneComponent* pSceneComponent;
+		class USceneComponent* pSceneComponent;
 
 #pragma endregion
 #pragma region Class_Variables

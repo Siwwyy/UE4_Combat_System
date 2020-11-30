@@ -24,13 +24,6 @@ protected:
 	FTimerHandle StopWatch;
 
 #pragma endregion
-#pragma region Class_Pointers_Public
-public:
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= "Class_Pointers_Public")
-	class ACombat_System_Logic * pCombat_System_Logic;
-
-#pragma endregion 
 #pragma region Class_Components
 protected:
 
@@ -43,10 +36,6 @@ protected:
 
 	virtual void BeginPlay() override;
 
-	//static void Receive_Damage(AActor* const HitPlayer, class ABase_Character* const CompOwner);
-	//
-	//static void Dodge_Damage(class ABase_Character* const CompOwner);
-	 
 	void Calm_Player(class ABase_Character* const CharacterToCalm);
 
 	UFUNCTION()
