@@ -6,6 +6,8 @@
 #include "Components/SceneComponent.h"
 #include "Components/SphereComponent.h"
 
+#include "UE4D_Logger.h"
+
 ATestMesh::ATestMesh()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -33,6 +35,13 @@ void ATestMesh::Tick(float DeltaTime)
 
 	float blend = 0.5f + static_cast<float>(FMath::Cos(GetWorld()->TimeSeconds) / 2);
 	pDynamicMaterial->SetScalarParameterValue(TEXT("Blend"), blend);
+
+
+	
+	//UE_LOG(LogTemp, Warning, FString::Printf(TEXT(" DDDD %s"), blend));
+	//UE_LOG(LogTemp, Warning, TEXT("%f"), *FString::Printf(TEXT(" %f"), blend));
+
+	UE4D::UE4D_Log("DUPA");
 }
 
 void ATestMesh::BeginPlay()

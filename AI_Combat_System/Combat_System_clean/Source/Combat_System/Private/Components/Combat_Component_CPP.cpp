@@ -114,7 +114,7 @@ void UCombat_Component_CPP::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AA
 		const FTimerDelegate CalmPlayerDelegate = FTimerDelegate::CreateUObject( this, &UCombat_Component_CPP::Calm_Player, Actor );
 		GetWorld()->GetTimerManager().SetTimer(StopWatch, CalmPlayerDelegate, 2.0f, false);
 	}
-
+	
 	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, FString::Printf(TEXT("OnOverlapEnd")));
 
 	pSphereComponent->SetGenerateOverlapEvents(false);		//when I hit NPC it prevents me from i.e hitting multiple times	
